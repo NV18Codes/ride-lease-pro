@@ -68,8 +68,8 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				bike: {
-					orange: 'hsl(var(--bike-orange))',
-					'orange-light': 'hsl(var(--bike-orange-light))',
+					navy: 'hsl(var(--bike-navy))',
+					'navy-light': 'hsl(var(--bike-navy-light))',
 					dark: 'hsl(var(--bike-dark))',
 					gray: 'hsl(var(--bike-gray))',
 					light: 'hsl(var(--bike-light))'

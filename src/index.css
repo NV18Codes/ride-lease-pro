@@ -20,9 +20,9 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 210 11% 15%;
 
-    --primary: 24 95% 53%;
+    --primary: 212 100% 47%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 24 100% 58%;
+    --primary-glow: 212 100% 60%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 210 11% 15%;
@@ -30,8 +30,8 @@ All colors MUST be HSL.
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 24 95% 96%;
-    --accent-foreground: 24 95% 53%;
+    --accent: 212 100% 96%;
+    --accent-foreground: 212 100% 47%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
@@ -44,13 +44,13 @@ All colors MUST be HSL.
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 24 95% 53%;
+    --ring: 212 100% 47%;
 
     --radius: 0.75rem;
 
     /* Custom bike rental colors */
-    --bike-orange: 24 95% 53%;
-    --bike-orange-light: 24 100% 58%;
+    --bike-navy: 212 100% 47%;
+    --bike-navy-light: 212 100% 60%;
     --bike-dark: 210 11% 15%;
     --bike-gray: 215.4 16.3% 46.9%;
     --bike-light: 210 40% 96.1%;
