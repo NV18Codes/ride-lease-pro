@@ -161,10 +161,12 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
             </div>
 
             {formData.start_date && formData.end_date && (
-              <div className="bg-primary/10 p-4 rounded-lg">
+              <div className="bg-gradient-primary/10 p-4 rounded-lg border border-primary/20">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold">Total Amount:</span>
-                  <span className="text-2xl font-bold text-primary">₹{calculateTotal()}</span>
+                  <span className="font-semibold text-foreground">Total Amount:</span>
+                  <span className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                    ₹{calculateTotal()}
+                  </span>
                 </div>
               </div>
             )}
@@ -181,7 +183,7 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               <Button
                 type="submit"
                 disabled={createBookingMutation.isPending}
-                className="flex-1 bg-gradient-primary"
+                className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300"
               >
                 {createBookingMutation.isPending ? (
                   <>
@@ -191,7 +193,7 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
                 ) : (
                   <>
                     <CreditCard className="h-4 w-4 mr-2" />
-                    Book Now
+                    Confirm Booking
                   </>
                 )}
               </Button>

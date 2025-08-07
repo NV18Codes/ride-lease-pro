@@ -27,7 +27,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
   };
 
   return (
-    <Card className="group hover:shadow-large transition-all duration-300 hover:-translate-y-1 bg-gradient-card border-0">
+    <Card className="group hover:shadow-glow transition-all duration-500 hover:-translate-y-2 bg-gradient-card border-0 overflow-hidden">
       <CardHeader className="p-0 relative">
         {/* Image */}
         <div className="relative h-48 bg-muted rounded-t-lg overflow-hidden">
@@ -43,10 +43,14 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           {/* Favorite Button */}
           <button
             onClick={() => setIsFavorited(!isFavorited)}
-            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-colors"
+            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-all duration-300 hover:scale-110 shadow-md"
           >
             <Heart 
-              className={`h-4 w-4 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+              className={`h-4 w-4 transition-all duration-300 ${
+                isFavorited 
+                  ? 'fill-red-500 text-red-500 scale-110' 
+                  : 'text-gray-600 hover:text-red-500'
+              }`} 
             />
           </button>
 
@@ -54,7 +58,11 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           <div className="absolute top-3 left-3">
             <Badge 
               variant={bike.status === 'available' ? "default" : "secondary"}
-              className={bike.status === 'available' ? "bg-green-500 text-white" : ""}
+              className={`${
+                bike.status === 'available' 
+                  ? "bg-green-500 hover:bg-green-600 text-white shadow-md" 
+                  : "bg-gray-500 text-white"
+              } transition-all duration-300`}
             >
               {bike.status === 'available' ? "Available" : "Booked"}
             </Badge>
@@ -62,7 +70,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
 
           {/* Type Badge */}
           <div className="absolute bottom-3 left-3">
-            <Badge variant="outline" className="bg-white/90 backdrop-blur-sm">
+            <Badge variant="outline" className="bg-white/95 backdrop-blur-sm border-white/20 shadow-sm">
               {bike.type}
             </Badge>
           </div>
@@ -145,7 +153,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           <Button 
             variant="outline" 
             size="sm" 
-            className="flex-1"
+            className="flex-1 hover:bg-primary hover:text-primary-foreground transition-all duration-300"
             onClick={handleBookNow}
           >
             <Clock className="h-4 w-4 mr-2" />
@@ -153,7 +161,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           </Button>
           <Button 
             size="sm" 
-            className="flex-1 bg-gradient-primary"
+            className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105"
             disabled={bike.status !== 'available'}
             onClick={handleBookNow}
           >

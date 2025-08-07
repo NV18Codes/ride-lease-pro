@@ -42,19 +42,24 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
               Home
             </a>
-            <a href="#bikes" className="text-foreground hover:text-primary transition-colors">
+            <a href="#bikes" className="text-foreground hover:text-primary transition-colors font-medium">
               Our Bikes
             </a>
-            <a href="#locations" className="text-foreground hover:text-primary transition-colors">
-              Locations
-            </a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors">
+            {user && (
+              <button 
+                onClick={() => navigate('/bookings')}
+                className="text-foreground hover:text-primary transition-colors font-medium"
+              >
+                My Bookings
+              </button>
+            )}
+            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium">
               About
             </a>
-            <a href="#contact" className="text-foreground hover:text-primary transition-colors">
+            <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
               Contact
             </a>
           </nav>
@@ -97,19 +102,24 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
-              <a href="#" className="text-foreground hover:text-primary transition-colors">
+              <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
                 Home
               </a>
-              <a href="#bikes" className="text-foreground hover:text-primary transition-colors">
+              <a href="#bikes" className="text-foreground hover:text-primary transition-colors font-medium">
                 Our Bikes
               </a>
-              <a href="#locations" className="text-foreground hover:text-primary transition-colors">
-                Locations
-              </a>
-              <a href="#about" className="text-foreground hover:text-primary transition-colors">
+              {user && (
+                <button 
+                  onClick={() => navigate('/bookings')}
+                  className="text-foreground hover:text-primary transition-colors font-medium text-left"
+                >
+                  My Bookings
+                </button>
+              )}
+              <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium">
                 About
               </a>
-              <a href="#contact" className="text-foreground hover:text-primary transition-colors">
+              <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">

@@ -68,8 +68,10 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				bike: {
-					navy: 'hsl(var(--bike-navy))',
-					'navy-light': 'hsl(var(--bike-navy-light))',
+					primary: 'hsl(var(--bike-primary))',
+					'primary-light': 'hsl(var(--bike-primary-light))',
+					secondary: 'hsl(var(--bike-secondary))',
+					accent: 'hsl(var(--bike-accent))',
 					dark: 'hsl(var(--bike-dark))',
 					gray: 'hsl(var(--bike-gray))',
 					light: 'hsl(var(--bike-light))'
@@ -87,24 +89,50 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
-				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-secondary': 'var(--gradient-secondary)',
 				'gradient-card': 'var(--gradient-card)',
+				'gradient-hero': 'var(--gradient-hero)'
 			},
 			boxShadow: {
-				'soft': 'var(--shadow-soft)',
-				'medium': 'var(--shadow-medium)',
+				'sm': 'var(--shadow-sm)',
+				'md': 'var(--shadow-md)',
+				'lg': 'var(--shadow-lg)',
 				'large': 'var(--shadow-large)',
+				'glow': 'var(--shadow-glow)'
 			},
 			transitionProperty: {
-				'smooth': 'var(--transition-smooth)',
-				'fast': 'var(--transition-fast)',
+				'smooth': 'var(--transition-smooth)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			animation: {
+				'fade-in': 'fadeIn 0.6s ease-out',
+				'slide-up': 'slideUp 0.8s ease-out',
+				'scale-in': 'scaleIn 0.4s ease-out',
+				'bounce-subtle': 'bounceSubtle 2s infinite',
+				'accordion-down': 'accordion-down 0.2s ease-out',
+				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
 			keyframes: {
+				fadeIn: {
+					'0%': { opacity: '0', transform: 'translateY(20px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				slideUp: {
+					'0%': { opacity: '0', transform: 'translateY(30px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				scaleIn: {
+					'0%': { opacity: '0', transform: 'scale(0.95)' },
+					'100%': { opacity: '1', transform: 'scale(1)' }
+				},
+				bounceSubtle: {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-5px)' }
+				},
 				'accordion-down': {
 					from: {
 						height: '0'
@@ -121,10 +149,6 @@ export default {
 						height: '0'
 					}
 				}
-			},
-			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
 			}
 		}
 	},
