@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, MapPin, Phone, User } from "lucide-react";
+import { Menu, X, MapPin, Phone, User, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
@@ -57,13 +61,27 @@ const Header = () => {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <User className="h-4 w-4 mr-2" />
-              Login
-            </Button>
-            <Button size="sm" className="bg-gradient-primary">
-              Sign Up
-            </Button>
+            {user ? (
+              <>
+                <span className="text-sm text-muted-foreground">
+                  Welcome, {user.email}
+                </span>
+                <Button variant="ghost" size="sm" onClick={signOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => navigate('/auth')}>
+                  <User className="h-4 w-4 mr-2" />
+                  Login
+                </Button>
+                <Button size="sm" className="bg-gradient-primary" onClick={() => navigate('/auth')}>
+                  Sign Up
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -95,13 +113,27 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-                <Button variant="ghost" size="sm">
-                  <User className="h-4 w-4 mr-2" />
-                  Login
-                </Button>
-                <Button size="sm" className="bg-gradient-primary">
-                  Sign Up
-                </Button>
+                {user ? (
+                  <>
+                    <span className="text-sm text-muted-foreground px-3">
+                      Welcome, {user.email}
+                    </span>
+                    <Button variant="ghost" size="sm" onClick={signOut}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" size="sm" onClick={() => navigate('/auth')}>
+                      <User className="h-4 w-4 mr-2" />
+                      Login
+                    </Button>
+                    <Button size="sm" className="bg-gradient-primary" onClick={() => navigate('/auth')}>
+                      Sign Up
+                    </Button>
+                  </>
+                )}
               </div>
             </nav>
           </div>

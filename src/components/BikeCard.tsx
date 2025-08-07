@@ -3,28 +3,28 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Star, Fuel, Users, MapPin, Clock, Calendar } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { Bike } from "@/hooks/useBikes";
+import BookingDialog from "./BookingDialog";
 
 interface BikeCardProps {
-  bike: {
-    id: string;
-    name: string;
-    model: string;
-    type: string;
-    image: string;
-    pricePerDay: number;
-    rating: number;
-    reviews: number;
-    location: string;
-    fuelType: string;
-    seating: number;
-    available: boolean;
-    features: string[];
-    description: string;
-  };
+  bike: Bike;
 }
 
 const BikeCard = ({ bike }: BikeCardProps) => {
   const [isFavorited, setIsFavorited] = useState(false);
+  const [showBookingDialog, setShowBookingDialog] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleBookNow = () => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    setShowBookingDialog(true);
+  };
 
   return (
     <Card className="group hover:shadow-large transition-all duration-300 hover:-translate-y-1 bg-gradient-card border-0">
@@ -32,7 +32,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
         {/* Image */}
         <div className="relative h-48 bg-muted rounded-t-lg overflow-hidden">
           <img 
-            src={bike.image} 
+            src={bike.image_url} 
             alt={bike.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
@@ -53,10 +53,10 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           {/* Availability Badge */}
           <div className="absolute top-3 left-3">
             <Badge 
-              variant={bike.available ? "default" : "secondary"}
-              className={bike.available ? "bg-success text-success-foreground" : ""}
+              variant={bike.status === 'available' ? "default" : "secondary"}
+              className={bike.status === 'available' ? "bg-green-500 text-white" : ""}
             >
-              {bike.available ? "Available" : "Booked"}
+              {bike.status === 'available' ? "Available" : "Booked"}
             </Badge>
           </div>
 
@@ -81,7 +81,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
             </div>
             <div className="text-right">
               <div className="text-2xl font-bold text-primary">
-                ₹{bike.pricePerDay}
+                ₹{bike.price_per_day}
               </div>
               <div className="text-xs text-muted-foreground">per day</div>
             </div>
@@ -94,7 +94,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
               <span className="font-medium">{bike.rating}</span>
             </div>
             <span className="text-muted-foreground text-sm">
-              ({bike.reviews} reviews)
+              ({bike.total_ratings} reviews)
             </span>
           </div>
         </div>
@@ -103,11 +103,11 @@ const BikeCard = ({ bike }: BikeCardProps) => {
         <div className="grid grid-cols-3 gap-3 mb-4 text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Fuel className="h-4 w-4" />
-            <span>{bike.fuelType}</span>
+            <span>{bike.fuel_type}</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <Users className="h-4 w-4" />
-            <span>{bike.seating} seater</span>
+            <span>2 seater</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="h-4 w-4" />
@@ -146,6 +146,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
             variant="outline" 
             size="sm" 
             className="flex-1"
+            onClick={handleBookNow}
           >
             <Clock className="h-4 w-4 mr-2" />
             Quick Book
@@ -153,12 +154,19 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           <Button 
             size="sm" 
             className="flex-1 bg-gradient-primary"
-            disabled={!bike.available}
+            disabled={bike.status !== 'available'}
+            onClick={handleBookNow}
           >
             <Calendar className="h-4 w-4 mr-2" />
             Book Now
           </Button>
         </div>
+        
+        <BookingDialog
+          bike={bike}
+          open={showBookingDialog}
+          onOpenChange={setShowBookingDialog}
+        />
       </CardContent>
     </Card>
   );

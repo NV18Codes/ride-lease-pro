@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import BikeCard from "./BikeCard";
 import BikeFilters from "./BikeFilters";
-import { bikesData } from "@/data/bikesData";
+import { useBikes } from "@/hooks/useBikes";
 import { Button } from "@/components/ui/button";
-import { Grid, List, SlidersHorizontal } from "lucide-react";
+import { Grid, List, SlidersHorizontal, Loader2 } from "lucide-react";
 
 const BikeGrid = () => {
   const [filters, setFilters] = useState({
@@ -17,48 +17,23 @@ const BikeGrid = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState("name");
 
-  // Filter and sort bikes
-  const filteredBikes = useMemo(() => {
-    let filtered = bikesData.filter(bike => {
-      // Location filter
-      if (filters.location && bike.location.toLowerCase() !== filters.location.toLowerCase()) {
-        return false;
-      }
-      
-      // Bike type filter
-      if (filters.bikeType && bike.type.toLowerCase() !== filters.bikeType.toLowerCase()) {
-        return false;
-      }
-      
-      // Price range filter
-      if (bike.pricePerDay < filters.priceRange[0] || bike.pricePerDay > filters.priceRange[1]) {
-        return false;
-      }
-      
-      // Availability filter
-      if (filters.availability === "now" && !bike.available) {
-        return false;
-      }
-      
-      // Search query filter
-      if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase();
-        const searchableText = `${bike.name} ${bike.model} ${bike.type} ${bike.features.join(" ")}`.toLowerCase();
-        if (!searchableText.includes(query)) {
-          return false;
-        }
-      }
-      
-      return true;
-    });
+  // Fetch bikes with filters
+  const { data: bikes = [], isLoading, error } = useBikes({
+    location: filters.location || undefined,
+    type: filters.bikeType || undefined,
+    priceRange: filters.priceRange as [number, number],
+    searchQuery: filters.searchQuery || undefined,
+  });
 
-    // Sort bikes
-    filtered.sort((a, b) => {
+  // Sort bikes
+  const sortedBikes = useMemo(() => {
+    const sorted = [...bikes];
+    sorted.sort((a, b) => {
       switch (sortBy) {
         case "price-low":
-          return a.pricePerDay - b.pricePerDay;
+          return a.price_per_day - b.price_per_day;
         case "price-high":
-          return b.pricePerDay - a.pricePerDay;
+          return b.price_per_day - a.price_per_day;
         case "rating":
           return b.rating - a.rating;
         case "name":
@@ -66,9 +41,8 @@ const BikeGrid = () => {
           return a.name.localeCompare(b.name);
       }
     });
-
-    return filtered;
-  }, [filters, sortBy]);
+    return sorted;
+  }, [bikes, sortBy]);
 
   return (
     <section id="bikes" className="py-16 bg-background">
@@ -90,7 +64,7 @@ const BikeGrid = () => {
         <div className="flex flex-col md:flex-row justify-between items-center py-6 border-b border-border">
           <div className="mb-4 md:mb-0">
             <p className="text-muted-foreground">
-              Showing <span className="font-semibold text-foreground">{filteredBikes.length}</span> bikes
+              Showing <span className="font-semibold text-foreground">{sortedBikes.length}</span> bikes
               {filters.location && (
                 <span> in <span className="font-semibold text-foreground capitalize">{filters.location}</span></span>
               )}
@@ -136,13 +110,24 @@ const BikeGrid = () => {
         </div>
 
         {/* Bikes Grid/List */}
-        {filteredBikes.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="ml-2 text-muted-foreground">Loading bikes...</span>
+          </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">⚠️</div>
+            <h3 className="text-2xl font-semibold text-foreground mb-2">Error loading bikes</h3>
+            <p className="text-muted-foreground">Please try again later.</p>
+          </div>
+        ) : sortedBikes.length > 0 ? (
           <div className={`pt-8 ${
             viewMode === "grid" 
               ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               : "space-y-4"
           }`}>
-            {filteredBikes.map((bike) => (
+            {sortedBikes.map((bike) => (
               <BikeCard key={bike.id} bike={bike} />
             ))}
           </div>
