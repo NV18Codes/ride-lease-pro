@@ -27,8 +27,8 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
   const [formData, setFormData] = useState({
     start_date: '',
     end_date: '',
-    pickup_location: bike.location,
-    drop_location: '',
+    pickup_location: 'Malpe, Udupi',
+    drop_location: 'Malpe, Udupi',
     special_instructions: '',
   });
 
@@ -66,8 +66,8 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
         setFormData({
           start_date: '',
           end_date: '',
-          pickup_location: bike.location,
-          drop_location: '',
+          pickup_location: 'Malpe, Udupi',
+          drop_location: 'Malpe, Udupi',
           special_instructions: '',
         });
       },
@@ -133,19 +133,18 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               <Input
                 id="pickup_location"
                 value={formData.pickup_location}
-                onChange={(e) => setFormData({ ...formData, pickup_location: e.target.value })}
-                placeholder="Enter pickup location"
-                required
+                disabled
+                className="bg-muted"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="drop_location">Drop Location (Optional)</Label>
+              <Label htmlFor="drop_location">Drop Location</Label>
               <Input
                 id="drop_location"
                 value={formData.drop_location}
-                onChange={(e) => setFormData({ ...formData, drop_location: e.target.value })}
-                placeholder="Same as pickup if empty"
+                disabled
+                className="bg-muted"
               />
             </div>
 

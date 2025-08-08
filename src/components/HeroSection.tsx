@@ -27,8 +27,8 @@ const HeroSection = () => {
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-slide-up">
-            From scooters to superbikes, discover the perfect ride for every journey. 
-            Premium vehicles, flexible booking, and unbeatable prices across India.
+            Explore beautiful Malpe and Udupi with our premium bikes. 
+            Comfortable rides, competitive prices, and easy booking for your coastal adventures.
           </p>
 
           {/* CTA Buttons */}
@@ -54,10 +54,10 @@ const HeroSection = () => {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
             {[
-              { number: "50K+", label: "Happy Riders", icon: Users },
-              { number: "1000+", label: "Bikes Available", icon: Bike },
-              { number: "25+", label: "Cities Covered", icon: MapPin },
-              { number: "4.8★", label: "User Rating", icon: Star }
+              { number: "1000+", label: "Happy Riders", icon: Users },
+              { number: "50+", label: "Quality Bikes", icon: Bike },
+              { number: "Malpe", label: "Coastal Location", icon: MapPin },
+              { number: "4.9★", label: "User Rating", icon: Star }
             ].map((stat, index) => (
               <div key={index} className="text-center group hover:scale-105 transition-transform duration-300">
                 <div className="flex justify-center mb-2">

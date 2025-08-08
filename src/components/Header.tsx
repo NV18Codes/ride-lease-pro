@@ -17,15 +17,15 @@ const Header = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <MapPin className="h-4 w-4" />
-              <span>Available in 25+ Cities</span>
+              <span>Malpe, Udupi</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 hidden sm:flex">
               <Phone className="h-4 w-4" />
-              <span>24/7 Support: 1800-123-4567</span>
+              <span>24/7 Support</span>
             </div>
           </div>
           <div className="hidden md:block">
-            <span>Book Now & Get 20% Off First Ride!</span>
+            <span>Book Now & Ride Today!</span>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@ const Header = () => {
               Home
             </a>
             <a href="#bikes" className="text-foreground hover:text-primary transition-colors font-medium">
-              Our Bikes
+              Bikes
             </a>
             {user && (
               <button 
@@ -56,12 +56,6 @@ const Header = () => {
                 My Bookings
               </button>
             )}
-            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium">
-              About
-            </a>
-            <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
-              Contact
-            </a>
           </nav>
 
           {/* Auth Buttons */}
@@ -106,7 +100,7 @@ const Header = () => {
                 Home
               </a>
               <a href="#bikes" className="text-foreground hover:text-primary transition-colors font-medium">
-                Our Bikes
+                Bikes
               </a>
               {user && (
                 <button 
@@ -116,12 +110,6 @@ const Header = () => {
                   My Bookings
                 </button>
               )}
-              <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium">
-                About
-              </a>
-              <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
-                Contact
-              </a>
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
                 {user ? (
                   <>
