@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Bookings from "./pages/Bookings";
 import NotFound from "./pages/NotFound";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        <WhatsAppButton phoneNumber="919999999999" message="Hi! I need help with my bike booking." />
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

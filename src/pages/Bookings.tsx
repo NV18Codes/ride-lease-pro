@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useBookings } from '@/hooks/useBookings';
+import { useBookings, useCancelBooking, useUpdateBooking, useSimulatePayment } from '@/hooks/useBookings';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Calendar, MapPin, Clock, IndianRupee, MoreHorizontal, Edit, Trash2, CreditCard, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import ModifyBookingDialog from '@/components/bookings/ModifyBookingDialog';
+import CancelBookingDialog from '@/components/bookings/CancelBookingDialog';
 
 const BookingsPage = () => {
   const { user } = useAuth();
@@ -17,7 +19,12 @@ const BookingsPage = () => {
   const { data: bookings = [], isLoading } = useBookings();
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [showModifyDialog, setShowModifyDialog] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+
+  const updateBooking = useUpdateBooking();
+  const cancelBooking = useCancelBooking();
+  const simulatePayment = useSimulatePayment();
 
   if (!user) {
     navigate('/auth');
@@ -40,18 +47,13 @@ const BookingsPage = () => {
   };
 
   const handleModifyBooking = (booking: any) => {
-    toast({
-      title: "Modify Booking",
-      description: "Booking modification will be available soon. Contact support for changes.",
-    });
+    setSelectedBooking(booking);
+    setShowModifyDialog(true);
   };
 
   const handleCancelBooking = (booking: any) => {
-    toast({
-      title: "Cancel Booking",
-      description: "Booking cancellation will be available soon. Contact support to cancel.",
-      variant: "destructive"
-    });
+    setSelectedBooking(booking);
+    setShowCancelDialog(true);
   };
 
   const handlePayNow = (booking: any) => {
@@ -60,17 +62,9 @@ const BookingsPage = () => {
   };
 
   const processPayment = async () => {
-    setIsProcessingPayment(true);
-    
-    // Simulate payment processing
-    setTimeout(() => {
-      setIsProcessingPayment(false);
-      setShowPaymentDialog(false);
-      toast({
-        title: "Payment Successful!",
-        description: "Your payment has been processed successfully.",
-      });
-    }, 2000);
+    if (!selectedBooking) return;
+    await simulatePayment.mutateAsync(selectedBooking);
+    setShowPaymentDialog(false);
   };
 
   if (isLoading) {
@@ -332,8 +326,30 @@ const BookingsPage = () => {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+
+      <ModifyBookingDialog
+        open={showModifyDialog}
+        onOpenChange={setShowModifyDialog}
+        booking={selectedBooking}
+        onSubmit={(values) => {
+          updateBooking.mutate(values);
+          setShowModifyDialog(false);
+        }}
+      />
+
+      <CancelBookingDialog
+        open={showCancelDialog}
+        onOpenChange={setShowCancelDialog}
+        booking={selectedBooking}
+        onConfirm={() => {
+          if (selectedBooking) {
+            cancelBooking.mutate(selectedBooking.id);
+          }
+          setShowCancelDialog(false);
+        }}
+      />
   );
+};
 };
 
 export default BookingsPage;
