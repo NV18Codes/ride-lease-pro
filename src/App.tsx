@@ -1,33 +1,82 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/hooks/useAuth";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Bookings from "./pages/Bookings";
 import NotFound from "./pages/NotFound";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import VehicleManagement from './pages/admin/VehicleManagement';
+import PaymentTracking from './pages/admin/PaymentTracking';
+import { useAdmin } from './hooks/useAdmin';
 
 const queryClient = new QueryClient();
+
+// Protected Route Component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+  return user ? <>{children}</> : <Navigate to="/auth" replace />;
+};
+
+// Admin Route Component
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAdmin, isLoading } = useAdmin();
+  
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+  
+  return isAdmin ? <>{children}</> : <Navigate to="/admin/login" replace />;
+};
+
+function AppRoutes() {
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Index />} />
+      <Route path="/auth" element={<Auth />} />
+      
+      {/* Admin Routes */}
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route 
+        path="/admin/dashboard" 
+        element={<AdminRoute><AdminDashboard /></AdminRoute>} 
+      />
+      <Route 
+        path="/admin/vehicles" 
+        element={<AdminRoute><VehicleManagement /></AdminRoute>} 
+      />
+      <Route 
+        path="/admin/payments" 
+        element={<AdminRoute><PaymentTracking /></AdminRoute>} 
+      />
+      
+      {/* Protected User Routes */}
+      <Route 
+        path="/bookings" 
+        element={<ProtectedRoute><Bookings /></ProtectedRoute>} 
+      />
+      
+      {/* Catch all route */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
         <Toaster />
-        <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/bookings" element={<Bookings />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AppRoutes />
+          <WhatsAppButton phoneNumber="919999999999" message="Hi! I need help with my bike booking." />
         </BrowserRouter>
-        <WhatsAppButton phoneNumber="919999999999" message="Hi! I need help with my bike booking." />
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

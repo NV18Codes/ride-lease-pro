@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar, MapPin, Clock, CreditCard } from 'lucide-react';
+import { Calendar, MapPin, Clock, CreditCard, Sparkles, Zap } from 'lucide-react';
 
 interface BookingDialogProps {
   bike: Bike;
@@ -76,36 +76,48 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
+          <DialogTitle className="flex items-center gap-3 text-2xl font-display font-bold">
+            <div className="p-2 bg-gradient-primary rounded-lg">
+              <Calendar className="h-6 w-6 text-white" />
+            </div>
             Book {bike.name}
           </DialogTitle>
-          <DialogDescription>
-            Fill in the details to book this bike for your ride.
+          <DialogDescription className="text-lg text-muted-foreground">
+            Fill in the details to book this amazing bike for your adventure ride.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          {/* Bike Info */}
-          <div className="flex items-center gap-3 p-3 bg-accent/20 rounded-lg">
+        <div className="space-y-6">
+          {/* Enhanced Bike Info */}
+          <div className="flex items-center gap-4 p-6 bg-gradient-card rounded-2xl border border-border/50">
             <img
               src={bike.image_url}
               alt={bike.name}
-              className="w-16 h-16 object-cover rounded-lg"
+              className="w-24 h-24 object-cover rounded-xl shadow-lg"
             />
-            <div>
-              <h4 className="font-semibold">{bike.name}</h4>
-              <p className="text-sm text-muted-foreground">{bike.model}</p>
-              <p className="text-lg font-bold text-primary">₹{bike.price_per_day}/day</p>
+            <div className="flex-1">
+              <h4 className="font-display font-bold text-xl text-foreground mb-2">{bike.name}</h4>
+              <p className="text-muted-foreground text-base mb-2">{bike.model}</p>
+              <div className="flex items-center gap-4">
+                <div className="text-2xl font-display font-black text-primary">₹{bike.price_per_day}/day</div>
+                <div className="flex items-center gap-1">
+                  <Sparkles className="h-4 w-4 text-yellow-500" />
+                  <span className="font-semibold text-foreground">{bike.rating}★</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="start_date">Start Date</Label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Enhanced Date Selection */}
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="start_date" className="text-base font-semibold flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-primary" />
+                  Start Date & Time
+                </Label>
                 <Input
                   id="start_date"
                   type="datetime-local"
@@ -113,10 +125,14 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
                   onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                   min={new Date().toISOString().slice(0, 16)}
                   required
+                  className="h-12 text-base border-2 border-border focus:border-primary transition-all duration-300"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="end_date">End Date</Label>
+              <div className="space-y-3">
+                <Label htmlFor="end_date" className="text-base font-semibold flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-primary" />
+                  End Date & Time
+                </Label>
                 <Input
                   id="end_date"
                   type="datetime-local"
@@ -124,75 +140,98 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
                   onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                   min={formData.start_date || new Date().toISOString().slice(0, 16)}
                   required
+                  className="h-12 text-base border-2 border-border focus:border-primary transition-all duration-300"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="pickup_location">Pickup Location</Label>
-              <Input
-                id="pickup_location"
-                value={formData.pickup_location}
-                disabled
-                className="bg-muted"
-              />
+            {/* Enhanced Location Fields */}
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="pickup_location" className="text-base font-semibold flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  Pickup Location
+                </Label>
+                <Input
+                  id="pickup_location"
+                  value={formData.pickup_location}
+                  disabled
+                  className="h-12 text-base bg-muted border-2 border-border/50"
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="drop_location" className="text-base font-semibold flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  Drop Location
+                </Label>
+                <Input
+                  id="drop_location"
+                  value={formData.drop_location}
+                  disabled
+                  className="h-12 text-base bg-muted border-2 border-border/50"
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="drop_location">Drop Location</Label>
-              <Input
-                id="drop_location"
-                value={formData.drop_location}
-                disabled
-                className="bg-muted"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="special_instructions">Special Instructions (Optional)</Label>
+            {/* Enhanced Special Instructions */}
+            <div className="space-y-3">
+              <Label htmlFor="special_instructions" className="text-base font-semibold flex items-center gap-2">
+                <Zap className="h-4 w-4 text-primary" />
+                Special Instructions (Optional)
+              </Label>
               <Textarea
                 id="special_instructions"
                 value={formData.special_instructions}
                 onChange={(e) => setFormData({ ...formData, special_instructions: e.target.value })}
-                placeholder="Any special requests or instructions..."
-                rows={3}
+                placeholder="Any special requests or instructions for your ride..."
+                rows={4}
+                className="text-base border-2 border-border focus:border-primary transition-all duration-300 resize-none"
               />
             </div>
 
+            {/* Enhanced Total Amount Display */}
             {formData.start_date && formData.end_date && (
-              <div className="bg-gradient-primary/10 p-4 rounded-lg border border-primary/20">
+              <div className="bg-gradient-primary/10 p-6 rounded-2xl border-2 border-primary/20">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-foreground">Total Amount:</span>
-                  <span className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                    ₹{calculateTotal()}
-                  </span>
+                  <div>
+                    <span className="font-semibold text-foreground text-lg">Total Amount:</span>
+                    <p className="text-sm text-muted-foreground">Including all taxes and insurance</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-3xl font-display font-black bg-gradient-primary bg-clip-text text-transparent">
+                      ₹{calculateTotal()}
+                    </span>
+                    <p className="text-sm text-muted-foreground">Secure payment via Razorpay</p>
+                  </div>
                 </div>
               </div>
             )}
 
-            <div className="flex gap-2">
+            {/* Enhanced Action Buttons */}
+            <div className="flex gap-4 pt-4">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
-                className="flex-1"
+                className="flex-1 h-12 text-base font-semibold border-2 border-border hover:border-destructive hover:text-destructive transition-all duration-300"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={createBookingMutation.isPending}
-                className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                className="flex-1 h-12 text-base font-semibold bg-gradient-primary hover:shadow-glow transition-all duration-300"
               >
                 {createBookingMutation.isPending ? (
                   <>
-                    <Clock className="h-4 w-4 mr-2 animate-spin" />
-                    Booking...
+                    <Clock className="h-5 w-5 mr-2 animate-spin" />
+                    Creating Booking...
                   </>
                 ) : (
                   <>
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Confirm Booking
+                    <CreditCard className="h-5 w-5 mr-2" />
+                    Confirm & Proceed to Payment
                   </>
                 )}
               </Button>

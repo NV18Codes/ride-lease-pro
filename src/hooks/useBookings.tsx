@@ -145,49 +145,41 @@ export interface UpdateBookingData {
 
 export const useUpdateBooking = () => {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
-
+  
   return useMutation({
-    mutationFn: async (data: UpdateBookingData) => {
-      if (!user) throw new Error('You must be logged in to modify a booking');
-
-      const { data: bikeData, error: bikeError } = await (supabase as any)
-        .from('bikes')
-        .select('price_per_day')
-        .eq('id', (await (supabase as any).from('bookings').select('bike_id').eq('id', data.id).single()).data.bike_id)
-        .single();
-
-      if (bikeError) throw new Error('Failed to get bike pricing');
-
-      const start = new Date(data.start_date);
-      const end = new Date(data.end_date);
-      const totalHours = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60));
-      const totalAmount = Math.ceil(totalHours / 24) * bikeData!.price_per_day;
-
-      const { data: updated, error } = await (supabase as any)
+    mutationFn: async (bookingData: Partial<Booking> & { id: string }) => {
+      const { id, ...updateData } = bookingData;
+      
+      const { data, error } = await supabase
         .from('bookings')
-        .update({
-          start_date: data.start_date,
-          end_date: data.end_date,
-          pickup_location: data.pickup_location,
-          drop_location: data.drop_location,
-          special_instructions: data.special_instructions,
-          total_hours: totalHours,
-          total_amount: totalAmount,
-        })
-        .eq('id', data.id)
+        .update(updateData)
+        .eq('id', id)
         .select()
         .single();
 
-      if (error) throw new Error(error.message);
-      return updated;
+      if (error) {
+        throw new Error(`Failed to update booking: ${error.message}`);
+      }
+
+      return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
-      toast({ title: 'Booking Updated', description: 'Your booking has been updated successfully.' });
+    onSuccess: (updatedBooking) => {
+      // Update the bookings list in the cache
+      queryClient.setQueryData(['bookings'], (oldData: Booking[] | undefined) => {
+        if (!oldData) return [updatedBooking];
+        
+        return oldData.map(booking => 
+          booking.id === updatedBooking.id ? updatedBooking : booking
+        );
+      });
+
+      // Also update individual booking if it exists in cache
+      queryClient.setQueryData(['booking', updatedBooking.id], updatedBooking);
+      
+      console.log('Booking updated successfully:', updatedBooking);
     },
     onError: (error) => {
-      toast({ title: 'Update Failed', description: error.message, variant: 'destructive' });
+      console.error('Error updating booking:', error);
     }
   });
 };

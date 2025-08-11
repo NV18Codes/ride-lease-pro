@@ -153,3 +153,29 @@ export const Constants = {
     Enums: {},
   },
 } as const
+
+export interface Booking {
+  id: string;
+  user_id: string;
+  bike_id: string;
+  start_date: string;
+  end_date: string;
+  pickup_location: string;
+  drop_location: string;
+  special_instructions?: string;
+  total_hours: number;
+  total_amount: number;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  payment_status: 'pending' | 'completed' | 'failed' | 'refunded';
+  payment_id?: string;
+  payment_method?: string;
+  paid_at?: string;
+  created_at: string;
+  updated_at: string;
+  bikes?: {
+    name: string;
+    brand: string;
+    model: string;
+    image_url?: string;
+  };
+}

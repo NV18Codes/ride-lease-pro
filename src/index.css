@@ -1,9 +1,9 @@
+/* Import Google Fonts - Enhanced typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
@@ -20,9 +20,10 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222 84% 4.9%;
 
-    --primary: 221 83% 53%;
+    /* Enhanced primary colors - More vibrant and modern */
+    --primary: 220 100% 50%;
     --primary-foreground: 210 40% 98%;
-    --primary-glow: 262 83% 58%;
+    --primary-glow: 250 100% 60%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222 47% 11%;
@@ -36,7 +37,7 @@ All colors MUST be HSL.
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --success: 142 71% 45%;
+    --success: 142 76% 36%;
     --success-foreground: 210 40% 98%;
 
     --warning: 38 92% 50%;
@@ -44,34 +45,44 @@ All colors MUST be HSL.
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --ring: 220 100% 50%;
 
     --radius: 0.75rem;
 
-    /* Custom bike rental colors */
-    --bike-primary: 221 83% 53%;
-    --bike-primary-light: 262 83% 58%;
-    --bike-secondary: 195 100% 39%;
-    --bike-accent: 142 71% 45%;
+    /* Enhanced bike rental colors - More appealing palette */
+    --bike-primary: 220 100% 50%;
+    --bike-primary-light: 250 100% 60%;
+    --bike-secondary: 200 100% 45%;
+    --bike-accent: 150 80% 40%;
     --bike-dark: 222 84% 4.9%;
     --bike-gray: 215.4 16.3% 46.9%;
     --bike-light: 210 40% 96.1%;
+    
+    /* New accent colors */
+    --bike-purple: 270 100% 60%;
+    --bike-orange: 25 100% 60%;
+    --bike-teal: 180 100% 40%;
+    --bike-pink: 330 100% 60%;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%), hsl(262 83% 58%));
-    --gradient-secondary: linear-gradient(135deg, hsl(195 100% 39%), hsl(221 83% 53%));
+    /* Enhanced gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(220 100% 50%), hsl(250 100% 60%));
+    --gradient-secondary: linear-gradient(135deg, hsl(200 100% 45%), hsl(220 100% 50%));
     --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(210 40% 98%));
-    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53% / 0.05), hsl(262 83% 58% / 0.05));
+    --gradient-hero: linear-gradient(135deg, hsl(220 100% 50% / 0.08), hsl(250 100% 60% / 0.08));
+    --gradient-accent: linear-gradient(135deg, hsl(150 80% 40%), hsl(180 100% 40%));
+    --gradient-warm: linear-gradient(135deg, hsl(25 100% 60%), hsl(45 100% 60%));
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(221 83% 53% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(221 83% 53% / 0.1), 0 2px 4px -1px hsl(221 83% 53% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(221 83% 53% / 0.1), 0 4px 6px -2px hsl(221 83% 53% / 0.05);
-    --shadow-large: 0 20px 25px -5px hsl(221 83% 53% / 0.1), 0 10px 10px -5px hsl(221 83% 53% / 0.04);
-    --shadow-glow: 0 0 40px hsl(221 83% 53% / 0.3);
+    /* Enhanced shadows */
+    --shadow-sm: 0 1px 3px 0 hsl(220 100% 50% / 0.1);
+    --shadow-md: 0 4px 8px -1px hsl(220 100% 50% / 0.15), 0 2px 4px -1px hsl(220 100% 50% / 0.1);
+    --shadow-lg: 0 10px 20px -3px hsl(220 100% 50% / 0.15), 0 4px 8px -2px hsl(220 100% 50% / 0.1);
+    --shadow-large: 0 20px 30px -5px hsl(220 100% 50% / 0.15), 0 10px 15px -5px hsl(220 100% 50% / 0.1);
+    --shadow-glow: 0 0 40px hsl(220 100% 50% / 0.3);
+    --shadow-soft: 0 2px 8px hsl(220 100% 50% / 0.08);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -80,7 +91,7 @@ All colors MUST be HSL.
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 220 100% 50%;
   }
 
   .dark {
@@ -93,9 +104,9 @@ All colors MUST be HSL.
     --popover: 222 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 221 83% 53%;
+    --primary: 220 100% 50%;
     --primary-foreground: 222 84% 4.9%;
-    --primary-glow: 262 83% 58%;
+    --primary-glow: 250 100% 60%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -111,12 +122,12 @@ All colors MUST be HSL.
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 221 83% 53%;
+    --ring: 220 100% 50%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%), hsl(262 83% 58%));
-    --gradient-secondary: linear-gradient(135deg, hsl(195 100% 39%), hsl(221 83% 53%));
+    --gradient-primary: linear-gradient(135deg, hsl(220 100% 50%), hsl(250 100% 60%));
+    --gradient-secondary: linear-gradient(135deg, hsl(200 100% 45%), hsl(220 100% 50%));
     --gradient-card: linear-gradient(135deg, hsl(222 84% 4.9%), hsl(217.2 32.6% 17.5%));
-    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53% / 0.1), hsl(262 83% 58% / 0.1));
+    --gradient-hero: linear-gradient(135deg, hsl(220 100% 50% / 0.15), hsl(250 100% 60% / 0.15));
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -125,7 +136,7 @@ All colors MUST be HSL.
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 220 100% 50%;
   }
 }
 
@@ -135,6 +146,73 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Enhanced typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced focus states */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full hover:bg-primary/50 transition-colors;
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(220 100% 50% / 0.3); }
+  50% { box-shadow: 0 0 40px hsl(220 100% 50% / 0.6); }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Utility classes */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out;
 }
