@@ -109,7 +109,7 @@ const BookingsPage = () => {
       // Show success toast
       toast({
         title: "Payment Successful! 🎉",
-        description: "Your booking has been confirmed and payment processed.",
+        description: "Your booking has been confirmed and payment processed. Happy Riding!",
         variant: "default",
       });
 
