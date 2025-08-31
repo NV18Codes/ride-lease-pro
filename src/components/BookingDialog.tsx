@@ -14,7 +14,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Calendar, MapPin, Clock, CreditCard, Sparkles, Zap, Shield, FileText, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, Clock, CreditCard, Shield, FileText, ExternalLink } from 'lucide-react';
+import { useBikeAvailability } from '@/hooks/useBikeAvailability';
 import VerificationDialog from './VerificationDialog';
 
 interface BookingDialogProps {
@@ -26,6 +27,7 @@ interface BookingDialogProps {
 const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
   const { user } = useAuth();
   const createBookingMutation = useCreateBooking();
+  const { data: availability } = useBikeAvailability(bike.id);
   const [showVerification, setShowVerification] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -104,6 +106,12 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
       return;
     }
 
+    // Check if bike is available
+    if (!availability?.isAvailable) {
+      alert('This bike is currently booked and not available for the selected time.');
+      return;
+    }
+
     // Validate pickup and drop times (7AM to 7PM)
     if (!validateTime(formData.start_date)) {
       alert('Pickup time must be between 7:00 AM and 7:00 PM.');
@@ -161,6 +169,26 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
         </DialogHeader>
 
         <div className="space-y-6">
+          {/* Bike Availability Warning */}
+          {!availability?.isAvailable && (
+            <div className="p-4 bg-bike-coral/10 rounded-xl border border-bike-coral/20">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-bike-coral/20 rounded-lg">
+                  <Calendar className="h-5 w-5 text-bike-coral" />
+                </div>
+                <div>
+                  <p className="font-semibold text-bike-coral">Bike Currently Booked</p>
+                  <p className="text-sm text-muted-foreground">
+                    This bike is not available for new bookings at the moment.
+                    {availability?.nextAvailableDate && (
+                      <span> Next available: {new Date(availability.nextAvailableDate).toLocaleString()}</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Enhanced Bike Info */}
           <div className="flex items-center gap-4 p-6 bg-gradient-card rounded-2xl border border-border/50">
             <img
@@ -174,7 +202,7 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               <div className="flex items-center gap-4">
                 <div className="text-2xl font-display font-black text-primary">₹{bike.price_per_day}/day</div>
                 <div className="flex items-center gap-1">
-                  <Sparkles className="h-4 w-4 text-yellow-500" />
+
                   <span className="font-semibold text-foreground">{bike.rating}★</span>
                 </div>
               </div>
@@ -273,7 +301,7 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
             {/* Enhanced Special Instructions */}
             <div className="space-y-3">
               <Label htmlFor="special_instructions" className="text-base font-semibold flex items-center gap-2">
-                <Zap className="h-4 w-4 text-primary" />
+
                 Special Instructions (Optional)
               </Label>
               <Textarea

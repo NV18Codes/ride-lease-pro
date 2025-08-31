@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Star, Fuel, Users, MapPin, Clock, Calendar, Sparkles } from "lucide-react";
+import { Heart, Star, Fuel, Users, MapPin, Clock, Calendar, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Bike } from "@/hooks/useBikes";
+import { useBikeAvailability } from "@/hooks/useBikeAvailability";
 import BookingDialog from "./BookingDialog";
 
 interface BikeCardProps {
@@ -17,6 +18,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { data: availability, isLoading: availabilityLoading } = useBikeAvailability(bike.id);
 
   const handleBookNow = () => {
     if (!user) {
@@ -24,6 +26,22 @@ const BikeCard = ({ bike }: BikeCardProps) => {
       return;
     }
     setShowBookingDialog(true);
+  };
+
+  const formatNextAvailableDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = date.getTime() - now.getTime();
+    const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 1) {
+      return `Available in ${diffDays} days`;
+    } else if (diffHours > 1) {
+      return `Available in ${diffHours} hours`;
+    } else {
+      return `Available soon`;
+    }
   };
 
   const getTypeColor = (type: string) => {
@@ -74,14 +92,26 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           {/* Enhanced Availability Badge */}
           <div className="absolute top-4 left-4">
             <Badge 
-              variant={bike.status === 'available' ? "default" : "secondary"}
+              variant={availability?.isAvailable ? "default" : "secondary"}
               className={`${
-                bike.status === 'available' 
+                availability?.isAvailable 
                   ? "bg-gradient-to-r from-bike-seafoam to-bike-sand hover:from-bike-seafoam/80 hover:to-bike-sand/80 text-white shadow-lg font-semibold" 
-                  : "bg-gradient-to-r from-bike-gray to-bike-dark text-white font-semibold"
+                  : "bg-gradient-to-r from-bike-coral to-bike-gray text-white font-semibold"
               } transition-all duration-300 px-3 py-1`}
             >
-              {bike.status === 'available' ? "Available" : "Booked"}
+              {availabilityLoading ? (
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  <span>Loading...</span>
+                </div>
+              ) : availability?.isAvailable ? (
+                "Available"
+              ) : (
+                <div className="flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  <span>Booked</span>
+                </div>
+              )}
             </Badge>
           </div>
 
@@ -127,7 +157,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
               </span>
             </div>
             <div className="flex items-center gap-1 text-primary">
-              <Sparkles className="h-4 w-4" />
+
               <span className="text-sm font-medium">Premium</span>
             </div>
           </div>
@@ -188,13 +218,28 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           <Button 
             size="sm" 
             className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 font-semibold"
-            disabled={bike.status !== 'available'}
+            disabled={!availability?.isAvailable}
             onClick={handleBookNow}
           >
             <Calendar className="h-4 w-4 mr-2" />
-            Book Now
+            {availability?.isAvailable ? "Book Now" : "Booked"}
           </Button>
         </div>
+        
+        {/* Availability Information */}
+        {!availability?.isAvailable && availability?.nextAvailableDate && (
+          <div className="mt-3 p-3 bg-bike-coral/10 rounded-lg border border-bike-coral/20">
+            <div className="flex items-center gap-2 text-bike-coral">
+              <AlertCircle className="h-4 w-4" />
+              <span className="text-sm font-medium">
+                {formatNextAvailableDate(availability.nextAvailableDate)}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Next available: {new Date(availability.nextAvailableDate).toLocaleString()}
+            </p>
+          </div>
+        )}
         
         <BookingDialog
           bike={bike}

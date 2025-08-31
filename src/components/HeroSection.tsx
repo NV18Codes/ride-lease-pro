@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Search, Sparkles, Zap } from "lucide-react";
+import { Search } from "lucide-react";
 
 const HeroSection = () => {
   const scrollToBikes = () => {
@@ -42,9 +42,7 @@ const HeroSection = () => {
               </span>
             </h1>
             <div className="flex justify-center items-center gap-2 mb-4">
-              <Sparkles className="h-6 w-6 text-primary animate-pulse" />
               <span className="text-lg font-medium text-primary">Premium Bike Rentals</span>
-              <Zap className="h-6 w-6 text-primary animate-pulse" />
             </div>
           </div>
 

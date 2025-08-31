@@ -68,10 +68,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       }`}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <Bike className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-xl font-bold text-gray-900">AMILIE'S BIKE RENTAL</h1>
+            <img 
+              src="/logo.png" 
+              alt="Bike Rental Logo" 
+              className="h-14 w-auto drop-shadow-2xl hover:drop-shadow-3xl transition-all duration-500 hover:scale-110"
+            />
           </div>
           <Button
             variant="ghost"

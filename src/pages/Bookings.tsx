@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Calendar, MapPin, Clock, IndianRupee, MoreHorizontal, Edit, Trash2, CreditCard, CheckCircle, Sparkles, Zap, X } from 'lucide-react';
+import { Calendar, MapPin, Clock, IndianRupee, MoreHorizontal, Edit, Trash2, CreditCard, CheckCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import ModifyBookingDialog from '@/components/bookings/ModifyBookingDialog';
@@ -151,7 +151,7 @@ const BookingsPage = () => {
             onClick={() => window.location.reload()} 
             className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-3 h-auto font-semibold"
           >
-            <Sparkles className="h-5 w-5 mr-2" />
+
             Try Again
           </Button>
         </div>
@@ -166,14 +166,12 @@ const BookingsPage = () => {
         <div className="flex items-center justify-between mb-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <Sparkles className="h-8 w-8 text-primary animate-pulse" />
               <h1 className="text-4xl font-display font-black text-foreground">My Bookings</h1>
-              <Zap className="h-8 w-8 text-primary animate-pulse" />
             </div>
             <p className="text-xl text-muted-foreground">Manage and track your amazing bike rental adventures</p>
           </div>
           <Button onClick={() => navigate('/')} className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-3 h-auto font-semibold">
-            <Sparkles className="h-5 w-5 mr-2" />
+
             Book New Ride
           </Button>
         </div>
@@ -185,7 +183,7 @@ const BookingsPage = () => {
               <h3 className="text-3xl font-display font-bold mb-4">No bookings yet</h3>
               <p className="text-xl text-muted-foreground mb-8">Start your adventure by booking your first amazing bike!</p>
               <Button onClick={() => navigate('/')} className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-3 h-auto font-semibold">
-                <Sparkles className="h-5 w-5 mr-2" />
+    
                 Browse Amazing Bikes
               </Button>
             </CardContent>

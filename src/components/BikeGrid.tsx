@@ -3,7 +3,7 @@ import BikeCard from "./BikeCard";
 import BikeFilters from "./BikeFilters";
 import { useBikes } from "@/hooks/useBikes";
 import { Button } from "@/components/ui/button";
-import { Grid, List, SlidersHorizontal, Loader2, Sparkles, Zap } from "lucide-react";
+import { Grid, List, SlidersHorizontal, Loader2 } from "lucide-react";
 
 const BikeGrid = () => {
   const [filters, setFilters] = useState({
@@ -50,11 +50,9 @@ const BikeGrid = () => {
         {/* Enhanced Section Header */}
         <div className="text-center mb-16">
           <div className="flex justify-center items-center gap-3 mb-6">
-            <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             <h2 className="text-5xl font-display font-black text-foreground">
               Choose Your Perfect Ride
             </h2>
-            <Zap className="h-8 w-8 text-primary animate-pulse" />
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             From comfortable scooters to powerful sports bikes, find the perfect vehicle for your journey. 
@@ -166,7 +164,7 @@ const BikeGrid = () => {
               })}
               className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-3 h-auto font-semibold"
             >
-              <Sparkles className="h-5 w-5 mr-2" />
+
               Clear All Filters
             </Button>
           </div>

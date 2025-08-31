@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { MapPin, Search, Filter, X, Sparkles } from "lucide-react";
+import { MapPin, Search, Filter, X } from "lucide-react";
 
 interface BikeFiltersProps {
   onFilterChange: (filters: any) => void;
@@ -102,7 +102,7 @@ const BikeFilters = ({ onFilterChange }: BikeFiltersProps) => {
         <Card className="p-8 bg-gradient-card shadow-soft border-0 animate-slide-up">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-3">
-              <Sparkles className="h-6 w-6 text-primary" />
+
               <h3 className="text-2xl font-display font-bold text-foreground">Advanced Filters</h3>
             </div>
             <Button 

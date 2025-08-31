@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, MapPin, Phone, User, LogOut, Sparkles } from "lucide-react";
+import { Menu, X, MapPin, Phone, User, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +25,7 @@ const Header = () => {
             </div>
           </div>
           <div className="hidden md:flex items-center gap-2">
-            <Sparkles className="h-4 w-4 animate-pulse" />
+
             <span className="font-medium">Book Now & Ride Today!</span>
           </div>
         </div>
@@ -36,9 +36,11 @@ const Header = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-3xl font-display font-bold bg-gradient-primary bg-clip-text text-transparent">
-              AMILIE'S BIKE RENTAL
-            </h1>
+            <img 
+              src="/logo.png" 
+              alt="Bike Rental Logo" 
+              className="h-20 w-auto drop-shadow-2xl hover:drop-shadow-3xl transition-all duration-500 hover:scale-110"
+            />
           </div>
 
           {/* Desktop Navigation */}
@@ -47,7 +49,17 @@ const Header = () => {
               Home
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-primary transition-all duration-300 group-hover:w-full"></span>
             </a>
-            <a href="#bikes" className="text-foreground hover:text-primary transition-colors font-medium relative group">
+            <a 
+              href="#bikes" 
+              className="text-foreground hover:text-primary transition-colors font-medium relative group"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('bikes')?.scrollIntoView({ 
+                  behavior: 'smooth',
+                  block: 'start'
+                });
+              }}
+            >
               Bikes
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-primary transition-all duration-300 group-hover:w-full"></span>
             </a>
@@ -67,7 +79,7 @@ const Header = () => {
             {user ? (
               <>
                 <span className="text-sm text-muted-foreground font-medium">
-                  Welcome, {user.email}
+                  Welcome, {user.user_metadata?.full_name || user.email}
                 </span>
                 <Button 
                   variant="ghost" 
@@ -95,7 +107,7 @@ const Header = () => {
                   className="bg-gradient-primary hover:shadow-glow hover:scale-105 transition-all duration-300 transform" 
                   onClick={() => navigate('/auth')}
                 >
-                  <Sparkles className="h-4 w-4 mr-2" />
+
                   Sign Up
                 </Button>
               </>
@@ -114,11 +126,32 @@ const Header = () => {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 py-4 border-t border-border/50 bg-card/50 backdrop-blur-sm rounded-lg animate-slide-in-right">
+            {/* Mobile Logo */}
+            <div className="flex justify-center mb-4">
+              <img 
+                src="/logo.png" 
+                alt="Bike Rental Logo" 
+                className="h-16 w-auto drop-shadow-2xl"
+              />
+            </div>
             <nav className="flex flex-col space-y-4">
               <a href="#" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 rounded-lg hover:bg-accent/50">
                 Home
               </a>
-              <a href="#bikes" className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 rounded-lg hover:bg-accent/50">
+              <a 
+                href="#bikes" 
+                className="text-foreground hover:text-primary transition-colors font-medium px-4 py-2 rounded-lg hover:bg-accent/50"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMenuOpen(false);
+                  setTimeout(() => {
+                    document.getElementById('bikes')?.scrollIntoView({ 
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }, 100);
+                }}
+              >
                 Bikes
               </a>
               {user && (
@@ -133,7 +166,7 @@ const Header = () => {
                 {user ? (
                   <>
                     <span className="text-sm text-muted-foreground font-medium px-2">
-                      Welcome, {user.email}
+                      Welcome, {user.user_metadata?.full_name || user.email}
                     </span>
                     <Button 
                       variant="ghost" 
@@ -161,7 +194,7 @@ const Header = () => {
                       className="bg-gradient-primary hover:shadow-glow transition-all duration-300 justify-start" 
                       onClick={() => navigate('/auth')}
                     >
-                      <Sparkles className="h-4 w-4 mr-2" />
+    
                       Sign Up
                     </Button>
                   </>

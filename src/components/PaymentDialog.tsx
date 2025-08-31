@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Calendar, MapPin, Clock, IndianRupee, CreditCard, CheckCircle, Shield, Zap, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, Clock, IndianRupee, CreditCard, CheckCircle, Shield } from 'lucide-react';
 import { Booking } from '@/hooks/useBookings';
 
 interface PaymentDialogProps {
@@ -78,7 +78,7 @@ export default function PaymentDialog({
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_GcDzPwQK0veSM9',
         amount: amountInPaise,
         currency: 'INR',
-        name: 'AMILIE\'S BIKE RENTAL',
+        name: 'Bike Rental',
         description: 'Bike Rental',
         prefill: {
           name: 'Test User',
@@ -106,7 +106,7 @@ export default function PaymentDialog({
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_GcDzPwQK0veSM9',
         amount: amountInPaise,
         currency: 'INR',
-        name: 'AMILIE\'S BIKE RENTAL',
+        name: 'Bike Rental',
         description: 'Bike Rental',
         prefill: {
           name: 'Test User',
@@ -239,7 +239,7 @@ export default function PaymentDialog({
           <Card className="border-2 border-border/50 shadow-soft">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center gap-3 text-xl font-display font-bold">
-                <Sparkles className="h-5 w-5 text-primary" />
+
                 Booking Summary
               </CardTitle>
             </CardHeader>
@@ -262,7 +262,7 @@ export default function PaymentDialog({
                       {booking.status}
                     </Badge>
                     <div className="flex items-center gap-1 text-primary">
-                      <Zap className="h-4 w-4" />
+
                       <span className="font-medium">Premium Ride</span>
                     </div>
                   </div>
@@ -346,7 +346,7 @@ export default function PaymentDialog({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-gradient-to-r from-bike-purple to-bike-pink rounded-xl flex items-center justify-center">
-                        <Zap className="h-6 w-6 text-white" />
+
                       </div>
                       <div>
                         <p className="font-display font-bold text-lg">Test Mode</p>
