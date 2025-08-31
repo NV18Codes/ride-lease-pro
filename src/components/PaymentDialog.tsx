@@ -83,7 +83,7 @@ export default function PaymentDialog({
         prefill: {
           name: 'Test User',
           email: 'test@example.com',
-          contact: '9999999999'
+          contact: '7892227029'
         },
         notes: {
           booking_id: booking.id
@@ -111,7 +111,7 @@ export default function PaymentDialog({
         prefill: {
           name: 'Test User',
           email: 'test@example.com',
-          contact: '9999999999'
+          contact: '7892227029'
         },
         notes: {
           booking_id: booking.id
