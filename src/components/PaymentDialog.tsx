@@ -78,7 +78,7 @@ export default function PaymentDialog({
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_GcDzPwQK0veSM9',
         amount: amountInPaise,
         currency: 'INR',
-        name: 'RideLease Pro',
+        name: 'AMILIE\'S BIKE RENTAL',
         description: 'Bike Rental',
         prefill: {
           name: 'Test User',
@@ -106,7 +106,7 @@ export default function PaymentDialog({
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_GcDzPwQK0veSM9',
         amount: amountInPaise,
         currency: 'INR',
-        name: 'RideLease Pro',
+        name: 'AMILIE\'S BIKE RENTAL',
         description: 'Bike Rental',
         prefill: {
           name: 'Test User',
@@ -258,7 +258,7 @@ export default function PaymentDialog({
                     {booking.bikes?.brand || 'Brand'} {booking.bikes?.model || 'Model'}
                   </p>
                   <div className="flex items-center gap-4">
-                    <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 font-semibold">
+                    <Badge className="bg-gradient-to-r from-bike-seafoam to-bike-sand text-white px-3 py-1 font-semibold">
                       {booking.status}
                     </Badge>
                     <div className="flex items-center gap-1 text-primary">

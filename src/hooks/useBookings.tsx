@@ -15,6 +15,10 @@ export interface Booking {
   drop_location?: string;
   special_instructions?: string;
   status: string;
+  payment_status?: 'pending' | 'completed' | 'failed' | 'refunded';
+  payment_id?: string;
+  payment_method?: string;
+  paid_at?: string;
   created_at: string;
   updated_at: string;
   bikes?: {
@@ -107,6 +111,7 @@ export const useCreateBooking = () => {
           drop_location: bookingData.drop_location,
           special_instructions: bookingData.special_instructions,
           status: 'pending',
+          payment_status: 'pending',
         })
         .select()
         .single();
@@ -136,11 +141,16 @@ export const useCreateBooking = () => {
 
 export interface UpdateBookingData {
   id: string;
-  start_date: string;
-  end_date: string;
-  pickup_location: string;
+  start_date?: string;
+  end_date?: string;
+  pickup_location?: string;
   drop_location?: string;
   special_instructions?: string;
+  payment_status?: 'pending' | 'completed' | 'failed' | 'refunded';
+  payment_id?: string;
+  payment_method?: string;
+  paid_at?: string;
+  status?: string;
 }
 
 export const useUpdateBooking = () => {

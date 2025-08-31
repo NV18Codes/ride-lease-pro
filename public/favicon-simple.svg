@@ -1,7 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#10B981"/>
-  <circle cx="10" cy="22" r="4" fill="white"/>
-  <circle cx="22" cy="22" r="4" fill="white"/>
-  <path d="M10 22L22 22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-  <path d="M16 22L16 18L14 16L18 16L16 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#8B5CF6"/>
+  
+  <!-- Bike wheels -->
+  <circle cx="8" cy="24" r="4" fill="white"/>
+  <circle cx="24" cy="24" r="4" fill="white"/>
+  
+  <!-- Bike frame -->
+  <path d="M8 24L24 24" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <path d="M16 24L16 20" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Handlebar -->
+  <path d="M16 20L12 16L20 16L16 20" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

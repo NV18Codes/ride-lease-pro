@@ -1,7 +1,7 @@
 # Razorpay Integration Setup Guide
 
 ## Overview
-This guide will help you set up Razorpay payment gateway integration for the RideLease Pro bike rental application.
+This guide will help you set up Razorpay payment gateway integration for the AMILIE'S BIKE RENTAL application.
 
 ## Prerequisites
 - Razorpay account (sign up at [razorpay.com](https://razorpay.com))
@@ -226,7 +226,7 @@ app.post('/api/webhook', async (req, res) => {
 
 ## Conclusion
 
-This setup guide covers the essential steps to integrate Razorpay into your RideLease Pro application. Remember to:
+This setup guide covers the essential steps to integrate Razorpay into your AMILIE'S BIKE RENTAL application. Remember to:
 
 1. Start with test mode for development
 2. Implement proper security measures

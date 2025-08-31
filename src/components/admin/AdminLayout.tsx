@@ -71,7 +71,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <Bike className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-xl font-bold text-gray-900">RideLease Pro</h1>
+            <h1 className="text-xl font-bold text-gray-900">AMILIE'S BIKE RENTAL</h1>
           </div>
           <Button
             variant="ghost"
@@ -122,7 +122,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <p className="text-sm font-medium text-gray-900 truncate">
                 {adminUser?.name || 'Admin User'}
               </p>
-              <p className="text-xs text-gray-500 truncate">
+              <p className="text-xs text-bike-gray truncate">
                 {adminUser?.email || 'admin@ridelease.com'}
               </p>
             </div>
@@ -130,7 +130,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="text-gray-500 hover:text-red-600"
+              className="text-bike-gray hover:text-bike-coral"
             >
               <LogOut className="w-4 h-4" />
             </Button>
@@ -153,7 +153,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </Button>
 
             <div className="flex items-center gap-4">
-              <div className="hidden sm:flex items-center gap-6 text-sm text-gray-500">
+              <div className="hidden sm:flex items-center gap-6 text-sm text-bike-gray">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
                   {new Date().toLocaleTimeString()}

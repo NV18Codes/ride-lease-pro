@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import ModifyBookingDialog from '@/components/bookings/ModifyBookingDialog';
 import CancelBookingDialog from '@/components/bookings/CancelBookingDialog';
 import PaymentDialog from '@/components/PaymentDialog';
-import { Booking } from '@/types/booking';
+import { Booking } from '@/hooks/useBookings';
 
 const BookingsPage = () => {
   const { user } = useAuth();
@@ -104,7 +104,7 @@ const BookingsPage = () => {
         payment_method: updatedBooking.payment_method || 'razorpay',
         paid_at: updatedBooking.paid_at,
         status: 'confirmed'
-      });
+      } as any);
 
       // Show success toast
       toast({
@@ -207,15 +207,15 @@ const BookingsPage = () => {
                     <div className="flex flex-col items-end gap-2">
                       {/* Payment Status Badge */}
                       <Badge 
-                        variant={booking.payment_status === 'completed' ? 'default' : 'secondary'}
+                        variant={(booking.payment_status || 'pending') === 'completed' ? 'default' : 'secondary'}
                         className={`
-                          ${booking.payment_status === 'completed' 
+                          ${(booking.payment_status || 'pending') === 'completed' 
                             ? 'bg-green-100 text-green-800 border-green-200' 
                             : 'bg-yellow-100 text-yellow-800 border-yellow-200'
                           }
                         `}
                       >
-                        {booking.payment_status === 'completed' ? '✅ Paid' : '⏳ Payment Pending'}
+                        {(booking.payment_status || 'pending') === 'completed' ? '✅ Paid' : '⏳ Payment Pending'}
                       </Badge>
                       
                       {/* Booking Status Badge */}
@@ -283,7 +283,7 @@ const BookingsPage = () => {
                   )}
 
                   {/* Payment Information */}
-                  {booking.payment_status === 'completed' && (
+                  {(booking.payment_status || 'pending') === 'completed' && (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                       <div className="flex items-center gap-2 text-green-800">
                         <CheckCircle className="w-4 h-4" />
@@ -304,7 +304,7 @@ const BookingsPage = () => {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 pt-2">
-                    {booking.payment_status === 'pending' ? (
+                    {(booking.payment_status || 'pending') === 'pending' ? (
                       <Button
                         onClick={() => handlePayNow(booking)}
                         className="flex-1 bg-gradient-primary hover:bg-gradient-primary/90"

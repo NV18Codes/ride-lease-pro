@@ -77,10 +77,10 @@ export default {
 					dark: 'hsl(var(--bike-dark))',
 					gray: 'hsl(var(--bike-gray))',
 					light: 'hsl(var(--bike-light))',
-					purple: 'hsl(var(--bike-purple))',
-					orange: 'hsl(var(--bike-orange))',
-					teal: 'hsl(var(--bike-teal))',
-					pink: 'hsl(var(--bike-pink))'
+					sand: 'hsl(var(--bike-sand))',
+					cream: 'hsl(var(--bike-cream))',
+					coral: 'hsl(var(--bike-coral))',
+					seafoam: 'hsl(var(--bike-seafoam))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',

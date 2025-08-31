@@ -1,8 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="6" fill="#3B82F6"/>
-  <path d="M8 20C8 17.7909 9.79086 16 12 16C14.2091 16 16 17.7909 16 20C16 22.2091 14.2091 24 12 24C9.79086 24 8 22.2091 8 20Z" fill="white"/>
-  <path d="M16 20C16 17.7909 17.7909 16 20 16C22.2091 16 24 17.7909 24 20C24 22.2091 22.2091 24 20 24C17.7909 24 16 22.2091 16 20Z" fill="white"/>
-  <path d="M12 20C12 18.8954 12.8954 18 14 18H18C19.1046 18 20 18.8954 20 20" stroke="white" stroke-width="2" stroke-linecap="round"/>
-  <path d="M14 18L16 14L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M16 14V12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#2563EB"/>
+  
+  <!-- Bike wheels -->
+  <circle cx="10" cy="22" r="4" fill="white"/>
+  <circle cx="22" cy="22" r="4" fill="white"/>
+  
+  <!-- Wheel centers -->
+  <circle cx="10" cy="22" r="1.5" fill="#2563EB"/>
+  <circle cx="22" cy="22" r="1.5" fill="#2563EB"/>
+  
+  <!-- Bike frame -->
+  <path d="M10 22L22 22" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <path d="M16 22L16 18" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <path d="M14 18L18 18" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Handlebar -->
+  <path d="M16 18L14 15L18 15L16 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Seat -->
+  <path d="M16 18L14 20L18 20L16 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

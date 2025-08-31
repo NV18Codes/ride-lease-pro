@@ -1,8 +1,8 @@
-# 🏍️ RideLease Pro - Premium Bike Rental Platform
+# 🏍️ AMILIE'S BIKE RENTAL - Premium Bike Rental Platform
 
 A modern, feature-rich bike rental application built with React, TypeScript, and Tailwind CSS. Experience seamless bike booking with beautiful UI/UX and integrated payment processing.
 
-![RideLease Pro](https://img.shields.io/badge/RideLease-Pro-blue?style=for-the-badge&logo=react)
+![AMILIE'S BIKE RENTAL](https://img.shields.io/badge/AMILIE%27S-BIKE_RENTAL-blue?style=for-the-badge&logo=react)
 ![React](https://img.shields.io/badge/React-18.3.1-blue?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.17-blue?style=for-the-badge&logo=tailwind-css)
@@ -227,7 +227,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Documentation**: [Project Wiki](https://github.com/yourusername/ride-lease-pro/wiki)
 - **Issues**: [GitHub Issues](https://github.com/yourusername/ride-lease-pro/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/yourusername/ride-lease-pro/discussions)
-- **Email**: support@rideleasepro.com
+- **Email**: support@amiliesbikerental.com
 
 ## 🔮 Roadmap
 
@@ -247,6 +247,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ by the RideLease Pro Team**
+**Made with ❤️ by the AMILIE'S BIKE RENTAL Team**
 
-*Experience the future of bike rentals with RideLease Pro - Where every ride is an adventure!*
+*Experience the future of bike rentals with AMILIE'S BIKE RENTAL - Where every ride is an adventure!*

@@ -29,15 +29,15 @@ const BikeCard = ({ bike }: BikeCardProps) => {
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'scooter':
-        return 'bg-gradient-to-r from-bike-purple to-bike-pink';
+        return 'bg-gradient-to-r from-bike-sand to-bike-cream';
       case 'motorcycle':
-        return 'bg-gradient-to-r from-bike-orange to-bike-pink';
+        return 'bg-gradient-to-r from-bike-coral to-bike-sand';
       case 'sports':
-        return 'bg-gradient-to-r from-bike-teal to-bike-purple';
+        return 'bg-gradient-to-r from-bike-seafoam to-bike-cream';
       case 'cruiser':
-        return 'bg-gradient-to-r from-bike-orange to-bike-teal';
+        return 'bg-gradient-to-r from-bike-coral to-bike-seafoam';
       case 'electric':
-        return 'bg-gradient-to-r from-bike-teal to-bike-green';
+        return 'bg-gradient-to-r from-bike-seafoam to-bike-sand';
       default:
         return 'bg-gradient-to-r from-bike-primary to-bike-secondary';
     }
@@ -65,8 +65,8 @@ const BikeCard = ({ bike }: BikeCardProps) => {
             <Heart 
               className={`h-5 w-5 transition-all duration-300 ${
                 isFavorited 
-                  ? 'fill-red-500 text-red-500 scale-110' 
-                  : 'text-gray-600 hover:text-red-500'
+                  ? 'fill-bike-coral text-bike-coral scale-110' 
+                  : 'text-bike-gray hover:text-bike-coral'
               }`} 
             />
           </button>
@@ -77,8 +77,8 @@ const BikeCard = ({ bike }: BikeCardProps) => {
               variant={bike.status === 'available' ? "default" : "secondary"}
               className={`${
                 bike.status === 'available' 
-                  ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg font-semibold" 
-                  : "bg-gradient-to-r from-gray-500 to-gray-600 text-white font-semibold"
+                  ? "bg-gradient-to-r from-bike-seafoam to-bike-sand hover:from-bike-seafoam/80 hover:to-bike-sand/80 text-white shadow-lg font-semibold" 
+                  : "bg-gradient-to-r from-bike-gray to-bike-dark text-white font-semibold"
               } transition-all duration-300 px-3 py-1`}
             >
               {bike.status === 'available' ? "Available" : "Booked"}
@@ -119,7 +119,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
-                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                <Star className="h-5 w-5 fill-bike-coral text-bike-coral" />
                 <span className="font-bold text-lg">{bike.rating}</span>
               </div>
               <span className="text-muted-foreground text-sm font-medium">
@@ -162,7 +162,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
               </Badge>
             ))}
             {bike.features.length > 3 && (
-              <Badge variant="secondary" className="text-xs bg-gradient-to-r from-bike-purple/10 to-bike-pink/10 text-bike-purple border border-bike-purple/20 font-medium px-3 py-1">
+              <Badge variant="secondary" className="text-xs bg-gradient-to-r from-bike-sand/10 to-bike-cream/10 text-bike-sand border border-bike-sand/20 font-medium px-3 py-1">
                 +{bike.features.length - 3} more
               </Badge>
             )}

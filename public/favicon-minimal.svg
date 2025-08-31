@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#10B981"/>
+  
+  <!-- Scooter body -->
+  <rect x="8" y="18" width="16" height="4" rx="2" fill="white"/>
+  
+  <!-- Wheels -->
+  <circle cx="10" cy="24" r="3" fill="white"/>
+  <circle cx="22" cy="24" r="3" fill="white"/>
+  
+  <!-- Handlebar -->
+  <rect x="14" y="14" width="4" height="6" rx="2" fill="white"/>
+  
+  <!-- Headlight -->
+  <circle cx="24" cy="20" r="2" fill="#F59E0B"/>
+</svg>

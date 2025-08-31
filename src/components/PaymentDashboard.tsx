@@ -84,15 +84,15 @@ export default function PaymentDashboard() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'captured':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
+        return <TrendingUp className="w-4 h-4 text-bike-seafoam" />;
       case 'failed':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
+        return <TrendingDown className="w-4 h-4 text-bike-coral" />;
       case 'authorized':
-        return <Activity className="w-4 h-4 text-yellow-500" />;
+        return <Activity className="w-4 h-4 text-bike-sand" />;
       case 'refunded':
-        return <DollarSign className="w-4 h-4 text-blue-500" />;
+        return <DollarSign className="w-4 h-4 text-bike-cream" />;
       default:
-        return <Activity className="w-4 h-4 text-gray-500" />;
+        return <Activity className="w-4 h-4 text-bike-gray" />;
     }
   };
 
@@ -162,7 +162,7 @@ export default function PaymentDashboard() {
                 <p className="text-sm font-medium text-gray-600">Total Amount</p>
                 <p className="text-2xl font-bold text-gray-900">₹{totalAmount}</p>
               </div>
-              <DollarSign className="w-8 h-8 text-green-500" />
+              <DollarSign className="w-8 h-8 text-bike-seafoam" />
             </div>
           </CardContent>
         </Card>
@@ -174,7 +174,7 @@ export default function PaymentDashboard() {
                 <p className="text-sm font-medium text-gray-600">Total Payments</p>
                 <p className="text-2xl font-bold text-gray-900">{filteredPayments.length}</p>
               </div>
-              <Activity className="w-8 h-8 text-blue-500" />
+              <Activity className="w-8 h-8 text-bike-cream" />
             </div>
           </CardContent>
         </Card>
@@ -186,7 +186,7 @@ export default function PaymentDashboard() {
                 <p className="text-sm font-medium text-gray-600">Successful</p>
                 <p className="text-2xl font-bold text-green-600">{successfulPayments}</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-green-500" />
+              <TrendingUp className="w-8 h-8 text-bike-seafoam" />
             </div>
           </CardContent>
         </Card>
@@ -198,7 +198,7 @@ export default function PaymentDashboard() {
                 <p className="text-sm font-medium text-gray-600">Failed</p>
                 <p className="text-2xl font-bold text-red-600">{failedPayments}</p>
               </div>
-              <TrendingDown className="w-8 h-8 text-red-500" />
+              <TrendingDown className="w-8 h-8 text-bike-coral" />
             </div>
           </CardContent>
         </Card>

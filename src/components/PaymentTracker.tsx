@@ -13,15 +13,15 @@ interface PaymentTrackerProps {
 const getStatusIcon = (status: string) => {
   switch (status) {
     case 'captured':
-      return <CheckCircle className="w-5 h-5 text-green-500" />;
+      return <CheckCircle className="w-5 h-5 text-bike-seafoam" />;
     case 'failed':
-      return <XCircle className="w-5 h-5 text-red-500" />;
+      return <XCircle className="w-5 h-5 text-bike-coral" />;
     case 'authorized':
-      return <Clock className="w-5 h-5 text-yellow-500" />;
+      return <Clock className="w-5 h-5 text-bike-sand" />;
     case 'refunded':
-      return <DollarSign className="w-5 h-5 text-blue-500" />;
+      return <DollarSign className="w-5 h-5 text-bike-cream" />;
     default:
-      return <AlertCircle className="w-5 h-5 text-gray-500" />;
+      return <AlertCircle className="w-5 h-5 text-bike-gray" />;
   }
 };
 
@@ -96,7 +96,7 @@ export default function PaymentTracker({ paymentId, onStatusUpdate }: PaymentTra
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-500 text-center">No payment ID provided</p>
+          <p className="text-bike-gray text-center">No payment ID provided</p>
         </CardContent>
       </Card>
     );
@@ -155,7 +155,7 @@ export default function PaymentTracker({ paymentId, onStatusUpdate }: PaymentTra
 
         {/* Last Checked */}
         {lastChecked && (
-          <div className="text-xs text-gray-500 text-center">
+          <div className="text-xs text-bike-gray text-center">
             Last checked: {lastChecked.toLocaleTimeString()}
           </div>
         )}
@@ -185,7 +185,7 @@ export default function PaymentTracker({ paymentId, onStatusUpdate }: PaymentTra
 
         {/* Auto-refresh info */}
         {autoRefresh && (
-          <div className="text-xs text-gray-500 text-center">
+          <div className="text-xs text-bike-gray text-center">
             Auto-refreshing every 10 seconds
           </div>
         )}

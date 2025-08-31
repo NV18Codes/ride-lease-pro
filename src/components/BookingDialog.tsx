@@ -13,7 +13,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar, MapPin, Clock, CreditCard, Sparkles, Zap } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Calendar, MapPin, Clock, CreditCard, Sparkles, Zap, Shield, FileText, ExternalLink } from 'lucide-react';
+import VerificationDialog from './VerificationDialog';
 
 interface BookingDialogProps {
   bike: Bike;
@@ -24,6 +26,9 @@ interface BookingDialogProps {
 const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
   const { user } = useAuth();
   const createBookingMutation = useCreateBooking();
+  const [showVerification, setShowVerification] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [formData, setFormData] = useState({
     start_date: '',
     end_date: '',
@@ -43,11 +48,70 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
     return days * bike.price_per_day;
   };
 
+  const validateTime = (dateTimeString: string) => {
+    const date = new Date(dateTimeString);
+    const hours = date.getHours();
+    return hours >= 7 && hours < 19; // 7AM to 7PM (19:00)
+  };
+
+  const getMinDateTime = () => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const minTime = new Date(today.getTime() + 7 * 60 * 60 * 1000); // 7AM today
+    return minTime > now ? minTime.toISOString().slice(0, 16) : now.toISOString().slice(0, 16);
+  };
+
+  const getMaxDateTime = () => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const maxTime = new Date(today.getTime() + 19 * 60 * 60 * 1000); // 7PM today
+    return maxTime.toISOString().slice(0, 16);
+  };
+
+  const getMinEndDateTime = () => {
+    if (!formData.start_date) return getMinDateTime();
+    const startDate = new Date(formData.start_date);
+    const startDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+    const minTime = new Date(startDay.getTime() + 7 * 60 * 60 * 1000); // 7AM on start day
+    return minTime > startDate ? minTime.toISOString().slice(0, 16) : formData.start_date;
+  };
+
+  const getMaxEndDateTime = () => {
+    if (!formData.start_date) return getMaxDateTime();
+    const startDate = new Date(formData.start_date);
+    const startDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+    const maxTime = new Date(startDay.getTime() + 19 * 60 * 60 * 1000); // 7PM on start day
+    return maxTime.toISOString().slice(0, 16);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!user) {
       onOpenChange(false);
+      return;
+    }
+
+    // Check if verification is required
+    if (!isVerified) {
+      setShowVerification(true);
+      return;
+    }
+
+    // Check if terms are accepted
+    if (!termsAccepted) {
+      alert('Please accept the Terms and Conditions to proceed with booking.');
+      return;
+    }
+
+    // Validate pickup and drop times (7AM to 7PM)
+    if (!validateTime(formData.start_date)) {
+      alert('Pickup time must be between 7:00 AM and 7:00 PM.');
+      return;
+    }
+
+    if (!validateTime(formData.end_date)) {
+      alert('Drop time must be between 7:00 AM and 7:00 PM.');
       return;
     }
 
@@ -70,8 +134,15 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
           drop_location: 'Malpe, Udupi',
           special_instructions: '',
         });
+        setIsVerified(false);
+        setTermsAccepted(false);
       },
     });
+  };
+
+  const handleVerificationComplete = (verified: boolean) => {
+    setIsVerified(verified);
+    setShowVerification(false);
   };
 
   return (
@@ -118,12 +189,27 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
                   <Clock className="h-4 w-4 text-primary" />
                   Start Date & Time
                 </Label>
+                <p className="text-sm text-muted-foreground">Available: 7:00 AM - 7:00 PM</p>
+                {formData.start_date && !validateTime(formData.start_date) && (
+                  <p className="text-sm text-red-500 flex items-center gap-1">
+                    ⚠️ Time must be between 7:00 AM and 7:00 PM
+                  </p>
+                )}
                 <Input
                   id="start_date"
                   type="datetime-local"
                   value={formData.start_date}
-                  onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                  min={new Date().toISOString().slice(0, 16)}
+                  onChange={(e) => {
+                    const newStartDate = e.target.value;
+                    setFormData({ ...formData, start_date: newStartDate });
+                    
+                    // If end date is set and before new start date, clear it
+                    if (formData.end_date && newStartDate && formData.end_date <= newStartDate) {
+                      setFormData(prev => ({ ...prev, end_date: '' }));
+                    }
+                  }}
+                  min={getMinDateTime()}
+                  max={getMaxDateTime()}
                   required
                   className="h-12 text-base border-2 border-border focus:border-primary transition-all duration-300"
                 />
@@ -133,12 +219,22 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
                   <Clock className="h-4 w-4 text-primary" />
                   End Date & Time
                 </Label>
+                <p className="text-sm text-muted-foreground">Available: 7:00 AM - 7:00 PM</p>
+                {formData.end_date && !validateTime(formData.end_date) && (
+                  <p className="text-sm text-red-500 flex items-center gap-1">
+                    ⚠️ Time must be between 7:00 AM and 7:00 PM
+                  </p>
+                )}
                 <Input
                   id="end_date"
                   type="datetime-local"
                   value={formData.end_date}
-                  onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                  min={formData.start_date || new Date().toISOString().slice(0, 16)}
+                  onChange={(e) => {
+                    const newEndDate = e.target.value;
+                    setFormData({ ...formData, end_date: newEndDate });
+                  }}
+                  min={getMinEndDateTime()}
+                  max={getMaxEndDateTime()}
                   required
                   className="h-12 text-base border-2 border-border focus:border-primary transition-all duration-300"
                 />
@@ -190,6 +286,19 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               />
             </div>
 
+            {/* Verification Status */}
+            {isVerified && (
+              <div className="bg-bike-seafoam/10 p-4 rounded-xl border border-bike-seafoam/20">
+                <div className="flex items-center gap-3">
+                  <Shield className="h-5 w-5 text-bike-seafoam" />
+                  <div>
+                    <p className="font-semibold text-bike-seafoam">Documents Verified ✓</p>
+                    <p className="text-sm text-muted-foreground">You're ready to proceed with booking</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Enhanced Total Amount Display */}
             {formData.start_date && formData.end_date && (
               <div className="bg-gradient-primary/10 p-6 rounded-2xl border-2 border-primary/20">
@@ -208,6 +317,38 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               </div>
             )}
 
+            {/* Terms and Conditions */}
+            {isVerified && formData.start_date && formData.end_date && (
+              <div className="bg-bike-light/50 p-4 rounded-xl border border-bike-sand/20">
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="terms"
+                    checked={termsAccepted}
+                    onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+                    className="mt-1"
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="terms" className="text-sm font-medium text-foreground cursor-pointer">
+                      I agree to the{' '}
+                      <a
+                        href="/Amelie Bike Rental T&C.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-bike-primary hover:text-bike-primary/80 underline inline-flex items-center gap-1"
+                      >
+                        Terms and Conditions
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                      {' '}and understand the rental policies, safety requirements, and liability terms.
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      By checking this box, you confirm that you have read and agree to all terms outlined in the document.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Enhanced Action Buttons */}
             <div className="flex gap-4 pt-4">
               <Button
@@ -220,7 +361,7 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               </Button>
               <Button
                 type="submit"
-                disabled={createBookingMutation.isPending}
+                disabled={createBookingMutation.isPending || (isVerified && !termsAccepted)}
                 className="flex-1 h-12 text-base font-semibold bg-gradient-primary hover:shadow-glow transition-all duration-300"
               >
                 {createBookingMutation.isPending ? (
@@ -228,10 +369,15 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
                     <Clock className="h-5 w-5 mr-2 animate-spin" />
                     Creating Booking...
                   </>
-                ) : (
+                ) : isVerified ? (
                   <>
                     <CreditCard className="h-5 w-5 mr-2" />
                     Confirm & Proceed to Payment
+                  </>
+                ) : (
+                  <>
+                    <Shield className="h-5 w-5 mr-2" />
+                    Verify Documents & Continue
                   </>
                 )}
               </Button>
@@ -239,6 +385,13 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
           </form>
         </div>
       </DialogContent>
+      
+      {/* Verification Dialog */}
+      <VerificationDialog
+        open={showVerification}
+        onOpenChange={setShowVerification}
+        onVerificationComplete={handleVerificationComplete}
+      />
     </Dialog>
   );
 };

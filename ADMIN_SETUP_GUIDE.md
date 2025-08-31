@@ -1,6 +1,6 @@
 # Admin Panel Setup Guide
 
-This guide will help you set up the complete admin system for RideLease Pro, including database setup, admin user creation, and configuration.
+This guide will help you set up the complete admin system for AMILIE'S BIKE RENTAL, including database setup, admin user creation, and configuration.
 
 ## 🗄️ Database Setup
 
@@ -290,4 +290,4 @@ If you encounter issues:
 4. Review RLS policies
 5. Ensure proper role assignments
 
-The admin system is now fully integrated with your database and provides secure, role-based access control for managing your RideLease Pro application.
+The admin system is now fully integrated with your database and provides secure, role-based access control for managing your AMILIE'S BIKE RENTAL application.

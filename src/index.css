@@ -20,123 +20,123 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222 84% 4.9%;
 
-    /* Enhanced primary colors - More vibrant and modern */
-    --primary: 220 100% 50%;
-    --primary-foreground: 210 40% 98%;
-    --primary-glow: 250 100% 60%;
+    /* Beach-themed primary colors - Sand brown and white palette */
+    --primary: 30 25% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 30 30% 55%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 30 15% 95%;
+    --secondary-foreground: 30 25% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 30 10% 96%;
+    --muted-foreground: 30 15% 40%;
 
-    --accent: 210 40% 94%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 30 20% 92%;
+    --accent-foreground: 30 25% 25%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --success: 142 76% 36%;
-    --success-foreground: 210 40% 98%;
+    --success: 120 40% 45%;
+    --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 222 84% 4.9%;
+    --warning: 45 80% 55%;
+    --warning-foreground: 30 25% 25%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 220 100% 50%;
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 30 25% 45%;
 
     --radius: 0.75rem;
 
-    /* Enhanced bike rental colors - More appealing palette */
-    --bike-primary: 220 100% 50%;
-    --bike-primary-light: 250 100% 60%;
-    --bike-secondary: 200 100% 45%;
-    --bike-accent: 150 80% 40%;
-    --bike-dark: 222 84% 4.9%;
-    --bike-gray: 215.4 16.3% 46.9%;
-    --bike-light: 210 40% 96.1%;
+    /* Beach-themed bike rental colors - Sand and coastal palette */
+    --bike-primary: 30 25% 45%;
+    --bike-primary-light: 30 30% 55%;
+    --bike-secondary: 25 20% 50%;
+    --bike-accent: 35 30% 40%;
+    --bike-dark: 30 25% 20%;
+    --bike-gray: 30 15% 50%;
+    --bike-light: 30 10% 96%;
     
-    /* New accent colors */
-    --bike-purple: 270 100% 60%;
-    --bike-orange: 25 100% 60%;
-    --bike-teal: 180 100% 40%;
-    --bike-pink: 330 100% 60%;
+    /* Beach accent colors */
+    --bike-sand: 35 25% 60%;
+    --bike-cream: 30 20% 85%;
+    --bike-coral: 15 60% 65%;
+    --bike-seafoam: 160 30% 70%;
 
-    /* Enhanced gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(220 100% 50%), hsl(250 100% 60%));
-    --gradient-secondary: linear-gradient(135deg, hsl(200 100% 45%), hsl(220 100% 50%));
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(210 40% 98%));
-    --gradient-hero: linear-gradient(135deg, hsl(220 100% 50% / 0.08), hsl(250 100% 60% / 0.08));
-    --gradient-accent: linear-gradient(135deg, hsl(150 80% 40%), hsl(180 100% 40%));
-    --gradient-warm: linear-gradient(135deg, hsl(25 100% 60%), hsl(45 100% 60%));
+    /* Beach-themed gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(30 25% 45%), hsl(35 30% 50%));
+    --gradient-secondary: linear-gradient(135deg, hsl(25 20% 50%), hsl(30 25% 45%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(30 10% 98%));
+    --gradient-hero: linear-gradient(135deg, hsl(30 25% 45% / 0.08), hsl(35 30% 50% / 0.08));
+    --gradient-accent: linear-gradient(135deg, hsl(35 25% 60%), hsl(30 20% 65%));
+    --gradient-warm: linear-gradient(135deg, hsl(35 25% 60%), hsl(30 20% 85%));
 
-    /* Enhanced shadows */
-    --shadow-sm: 0 1px 3px 0 hsl(220 100% 50% / 0.1);
-    --shadow-md: 0 4px 8px -1px hsl(220 100% 50% / 0.15), 0 2px 4px -1px hsl(220 100% 50% / 0.1);
-    --shadow-lg: 0 10px 20px -3px hsl(220 100% 50% / 0.15), 0 4px 8px -2px hsl(220 100% 50% / 0.1);
-    --shadow-large: 0 20px 30px -5px hsl(220 100% 50% / 0.15), 0 10px 15px -5px hsl(220 100% 50% / 0.1);
-    --shadow-glow: 0 0 40px hsl(220 100% 50% / 0.3);
-    --shadow-soft: 0 2px 8px hsl(220 100% 50% / 0.08);
+    /* Beach-themed shadows */
+    --shadow-sm: 0 1px 3px 0 hsl(30 25% 45% / 0.1);
+    --shadow-md: 0 4px 8px -1px hsl(30 25% 45% / 0.15), 0 2px 4px -1px hsl(30 25% 45% / 0.1);
+    --shadow-lg: 0 10px 20px -3px hsl(30 25% 45% / 0.15), 0 4px 8px -2px hsl(30 25% 45% / 0.1);
+    --shadow-large: 0 20px 30px -5px hsl(30 25% 45% / 0.15), 0 10px 15px -5px hsl(30 25% 45% / 0.1);
+    --shadow-glow: 0 0 40px hsl(30 25% 45% / 0.3);
+    --shadow-soft: 0 2px 8px hsl(30 25% 45% / 0.08);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 220 100% 50%;
+    --sidebar-background: 30 10% 98%;
+    --sidebar-foreground: 30 25% 25%;
+    --sidebar-primary: 30 25% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 15% 95%;
+    --sidebar-accent-foreground: 30 25% 25%;
+    --sidebar-border: 30 15% 88%;
+    --sidebar-ring: 30 25% 45%;
   }
 
   .dark {
-    --background: 222 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 30 25% 8%;
+    --foreground: 30 10% 95%;
 
-    --card: 222 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 30 25% 12%;
+    --card-foreground: 30 10% 95%;
 
-    --popover: 222 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 30 25% 12%;
+    --popover-foreground: 30 10% 95%;
 
-    --primary: 220 100% 50%;
-    --primary-foreground: 222 84% 4.9%;
-    --primary-glow: 250 100% 60%;
+    --primary: 35 30% 60%;
+    --primary-foreground: 30 25% 8%;
+    --primary-glow: 35 35% 70%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 30 20% 15%;
+    --secondary-foreground: 30 10% 95%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 30 20% 15%;
+    --muted-foreground: 30 15% 70%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 30 20% 15%;
+    --accent-foreground: 30 10% 95%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 30 10% 95%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 220 100% 50%;
+    --border: 30 20% 20%;
+    --input: 30 20% 20%;
+    --ring: 35 30% 60%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(220 100% 50%), hsl(250 100% 60%));
-    --gradient-secondary: linear-gradient(135deg, hsl(200 100% 45%), hsl(220 100% 50%));
-    --gradient-card: linear-gradient(135deg, hsl(222 84% 4.9%), hsl(217.2 32.6% 17.5%));
-    --gradient-hero: linear-gradient(135deg, hsl(220 100% 50% / 0.15), hsl(250 100% 60% / 0.15));
+    --gradient-primary: linear-gradient(135deg, hsl(35 30% 60%), hsl(30 25% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(30 25% 65%), hsl(35 30% 60%));
+    --gradient-card: linear-gradient(135deg, hsl(30 25% 12%), hsl(30 20% 15%));
+    --gradient-hero: linear-gradient(135deg, hsl(35 30% 60% / 0.15), hsl(30 25% 65% / 0.15));
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 220 100% 50%;
+    --sidebar-background: 30 25% 8%;
+    --sidebar-foreground: 30 10% 95%;
+    --sidebar-primary: 35 30% 60%;
+    --sidebar-primary-foreground: 30 25% 8%;
+    --sidebar-accent: 30 20% 15%;
+    --sidebar-accent-foreground: 30 10% 95%;
+    --sidebar-border: 30 20% 20%;
+    --sidebar-ring: 35 30% 60%;
   }
 }
 

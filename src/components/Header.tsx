@@ -37,7 +37,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <h1 className="text-3xl font-display font-bold bg-gradient-primary bg-clip-text text-transparent">
-              RideLease Pro
+              AMILIE'S BIKE RENTAL
             </h1>
           </div>
 

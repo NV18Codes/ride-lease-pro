@@ -2,7 +2,7 @@
 
 ## 📋 **Overview**
 
-This guide explains how to implement and use real-time payment tracking in your RideLease Pro application. You now have multiple ways to monitor payment status in real-time.
+This guide explains how to implement and use real-time payment tracking in your AMILIE'S BIKE RENTAL application. You now have multiple ways to monitor payment status in real-time.
 
 ## 🔄 **Real-Time Tracking Methods**
 

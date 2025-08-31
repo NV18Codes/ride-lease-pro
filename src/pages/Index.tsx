@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import BikeGrid from "@/components/BikeGrid";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -8,6 +9,7 @@ const Index = () => {
       <Header />
       <HeroSection />
       <BikeGrid />
+      <Footer />
     </div>
   );
 };

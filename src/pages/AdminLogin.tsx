@@ -62,7 +62,7 @@ export default function AdminLogin() {
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
-          <p className="text-slate-300">Access the RideLease Pro dashboard</p>
+          <p className="text-slate-300">Access the AMILIE'S BIKE RENTAL dashboard</p>
         </div>
 
         {/* Login Card */}
@@ -153,7 +153,7 @@ export default function AdminLogin() {
         {/* Footer */}
         <div className="text-center mt-6">
           <p className="text-slate-400 text-sm">
-            © 2024 RideLease Pro. Admin access only.
+            © 2024 AMILIE'S BIKE RENTAL. Admin access only.
           </p>
         </div>
       </div>
