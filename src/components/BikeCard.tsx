@@ -65,7 +65,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
     <Card className="group hover:shadow-glow transition-all duration-500 hover:-translate-y-3 bg-gradient-card border-0 overflow-hidden animate-fade-in">
       <CardHeader className="p-0 relative">
         {/* Enhanced Image */}
-        <div className="relative h-56 bg-muted rounded-t-xl overflow-hidden">
+        <div className="relative h-48 sm:h-56 bg-muted rounded-t-xl overflow-hidden">
           <img 
             src={bike.image_url} 
             alt={bike.name}
@@ -127,18 +127,18 @@ const BikeCard = ({ bike }: BikeCardProps) => {
         </div>
       </CardHeader>
 
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6">
         {/* Enhanced Header */}
-        <div className="space-y-3 mb-5">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-display font-bold text-xl text-foreground leading-tight">
+        <div className="space-y-3 mb-4 sm:mb-5">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0">
+            <div className="flex-1">
+              <h3 className="font-display font-bold text-lg sm:text-xl text-foreground leading-tight">
                 {bike.name}
               </h3>
-              <p className="text-muted-foreground text-sm font-medium">{bike.model}</p>
+              <p className="text-muted-foreground text-xs sm:text-sm font-medium">{bike.model}</p>
             </div>
-            <div className="text-right">
-              <div className="text-3xl font-display font-black text-primary">
+            <div className="text-left sm:text-right">
+              <div className="text-2xl sm:text-3xl font-display font-black text-primary">
                 ₹{bike.price_per_day}
               </div>
               <div className="text-xs text-muted-foreground font-medium">per day</div>
@@ -205,24 +205,26 @@ const BikeCard = ({ bike }: BikeCardProps) => {
         </p>
 
         {/* Enhanced Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <Button 
             variant="outline" 
             size="sm" 
-            className="flex-1 hover:bg-primary hover:text-primary-foreground transition-all duration-300 border-2 hover:border-primary font-semibold"
+            className="flex-1 hover:bg-primary hover:text-primary-foreground transition-all duration-300 border-2 hover:border-primary font-semibold text-xs sm:text-sm"
             onClick={handleBookNow}
           >
-            <Clock className="h-4 w-4 mr-2" />
-            Quick Book
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Quick Book</span>
+            <span className="sm:hidden">Quick</span>
           </Button>
           <Button 
             size="sm" 
-            className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 font-semibold"
+            className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 font-semibold text-xs sm:text-sm"
             disabled={!availability?.isAvailable}
             onClick={handleBookNow}
           >
-            <Calendar className="h-4 w-4 mr-2" />
-            {availability?.isAvailable ? "Book Now" : "Booked"}
+            <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">{availability?.isAvailable ? "Book Now" : "Booked"}</span>
+            <span className="sm:hidden">{availability?.isAvailable ? "Book" : "Booked"}</span>
           </Button>
         </div>
         

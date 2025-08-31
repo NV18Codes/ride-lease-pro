@@ -32,14 +32,14 @@ const Header = () => {
       </div>
 
       {/* Main navigation */}
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3 md:py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center">
             <img 
               src="/logo.png" 
               alt="Bike Rental Logo" 
-              className="h-20 w-auto drop-shadow-2xl hover:drop-shadow-3xl transition-all duration-500 hover:scale-110"
+              className="h-12 sm:h-16 md:h-20 w-auto drop-shadow-2xl hover:drop-shadow-3xl transition-all duration-500 hover:scale-110"
             />
           </div>
 
@@ -131,7 +131,7 @@ const Header = () => {
               <img 
                 src="/logo.png" 
                 alt="Bike Rental Logo" 
-                className="h-16 w-auto drop-shadow-2xl"
+                className="h-14 sm:h-16 w-auto drop-shadow-2xl"
               />
             </div>
             <nav className="flex flex-col space-y-4">

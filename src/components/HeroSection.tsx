@@ -34,33 +34,34 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10 h-full flex items-center justify-center">
         <div className="text-center max-w-5xl mx-auto">
           {/* Enhanced Main heading */}
-          <div className="mb-6">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-black text-foreground mb-6 animate-fade-in leading-tight">
+          <div className="mb-4 md:mb-6">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-black text-foreground mb-4 md:mb-6 animate-fade-in leading-tight">
               Ride Your Way to
               <span className="block bg-gradient-primary bg-clip-text text-transparent animate-pulse-glow">
                 Adventure
               </span>
             </h1>
-            <div className="flex justify-center items-center gap-2 mb-4">
-              <span className="text-lg font-medium text-primary">Premium Bike Rentals</span>
+            <div className="flex justify-center items-center gap-2 mb-3 md:mb-4">
+              <span className="text-base sm:text-lg font-medium text-primary">Premium Bike Rentals</span>
             </div>
           </div>
 
           {/* Enhanced Subtitle */}
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-slide-up leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground mb-6 md:mb-8 max-w-3xl mx-auto animate-slide-up leading-relaxed px-4">
             Explore the beautiful coastal paradise of <span className="font-semibold text-primary">Malpe and Udupi</span> with our premium bikes. 
             Comfortable rides, competitive prices, and seamless booking for your coastal adventures.
           </p>
 
           {/* Enhanced CTA Button */}
-          <div className="flex justify-center mb-12 animate-scale-in">
+          <div className="flex justify-center mb-8 md:mb-12 animate-scale-in px-4">
             <Button 
               size="lg" 
-              className="bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 text-lg px-8 py-6 h-auto font-semibold"
+              className="bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 text-sm sm:text-base md:text-lg px-6 sm:px-8 py-4 sm:py-6 h-auto font-semibold w-full sm:w-auto"
               onClick={scrollToBikes}
             >
-              <Search className="h-6 w-6 mr-3" />
-              Find Your Perfect Ride
+              <Search className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 mr-2 sm:mr-3" />
+              <span className="hidden sm:inline">Find Your Perfect Ride</span>
+              <span className="sm:hidden">Find Your Ride</span>
             </Button>
           </div>
 
