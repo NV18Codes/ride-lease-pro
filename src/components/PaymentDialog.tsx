@@ -79,7 +79,8 @@ export default function PaymentDialog({
         amount: amountInPaise,
         currency: 'INR',
         name: 'Bike Rental',
-        description: 'Bike Rental',
+        description: 'Premium Bike Rental Service',
+        image: '/logo.png',
         prefill: {
           name: 'Test User',
           email: 'test@example.com',
@@ -107,7 +108,8 @@ export default function PaymentDialog({
         amount: amountInPaise,
         currency: 'INR',
         name: 'Bike Rental',
-        description: 'Bike Rental',
+        description: 'Premium Bike Rental Service',
+        image: '/logo.png',
         prefill: {
           name: 'Test User',
           email: 'test@example.com',
