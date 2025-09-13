@@ -67,11 +67,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     });
 
     if (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      // Don't show toast here - let the component handle it
+      console.error('Signup error:', error);
     } else {
       toast({
         title: "Success",

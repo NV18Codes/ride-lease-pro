@@ -79,7 +79,23 @@ const Auth = () => {
     
     const { error } = await signUp(email, password, fullName);
     if (error) {
-      if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+      console.log('Signup error details:', {
+        message: error.message,
+        status: error.status,
+        name: error.name
+      });
+      
+      // Check for various ways Supabase might indicate existing user
+      const errorMessage = error.message.toLowerCase();
+      if (errorMessage.includes('already registered') || 
+          errorMessage.includes('user already registered') ||
+          errorMessage.includes('email already registered') ||
+          errorMessage.includes('user with this email already exists') ||
+          errorMessage.includes('duplicate key value') ||
+          errorMessage.includes('already exists') ||
+          errorMessage.includes('user already exists') ||
+          errorMessage.includes('email already in use') ||
+          errorMessage.includes('email is already registered')) {
         setError('An account with this email already exists. Please sign in instead or use "Forgot Password" to reset your password.');
       } else {
         setError(error.message);
