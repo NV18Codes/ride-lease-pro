@@ -179,6 +179,27 @@ export const useCreateBooking = () => {
       if (startDate < new Date()) {
         throw new Error('Start date cannot be in the past');
       }
+
+      // 🚨 CRITICAL: Check if bike is already booked for this time period
+      console.log('🔍 Checking bike availability before booking...');
+      const { data: existingBookings, error: availabilityError } = await (supabase as any)
+        .from('bookings')
+        .select('id, user_id, start_date, end_date, status')
+        .eq('bike_id', bookingData.bike_id)
+        .in('status', ['confirmed', 'active', 'pending'])
+        .or(`and(start_date.lte.${bookingData.start_date},end_date.gte.${bookingData.start_date}),and(start_date.lte.${bookingData.end_date},end_date.gte.${bookingData.end_date}),and(start_date.gte.${bookingData.start_date},end_date.lte.${bookingData.end_date})`);
+
+      if (availabilityError) {
+        console.error('Error checking bike availability:', availabilityError);
+        throw new Error('Failed to check bike availability');
+      }
+
+      if (existingBookings && existingBookings.length > 0) {
+        console.error('🚨 BIKE ALREADY BOOKED!', existingBookings);
+        throw new Error('This bike is already booked for the selected time period. Please choose different dates or another bike.');
+      }
+
+      console.log('✅ Bike is available for booking');
       
       const totalHours = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60));
 
