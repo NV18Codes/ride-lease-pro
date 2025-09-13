@@ -88,7 +88,7 @@ export default function AdminLogin() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@ridelease.com"
+                  placeholder="amilebikerental@gmail.com"
                   className="bg-white/10 border-white/20 text-white placeholder:text-slate-300 focus:border-blue-400 focus:ring-blue-400"
                   required
                 />
@@ -145,7 +145,7 @@ export default function AdminLogin() {
             <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
               <h3 className="text-sm font-semibold text-slate-300 mb-2">Test Credentials:</h3>
               <div className="text-xs text-slate-400 space-y-1">
-                <p><strong>Email:</strong> admin@ridelease.com</p>
+                <p><strong>Email:</strong> amilebikerental@gmail.com</p>
                 <p><strong>Password:</strong> admin123</p>
               </div>
             </div>

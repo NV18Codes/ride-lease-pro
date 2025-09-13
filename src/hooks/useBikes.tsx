@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { bikesData } from '@/data/bikesData';
 
 export interface Bike {
   id: string;
@@ -59,10 +60,39 @@ export const useBikes = (filters?: {
       const { data, error } = await (query as any).order('created_at', { ascending: false });
 
       if (error) {
-        throw new Error(error.message);
+        console.warn('Database error, falling back to static data:', error.message);
+        // Fallback to static data if database fails
+        return bikesData.map(bike => ({
+          ...bike,
+          brand: 'Yamaha',
+          image_url: bike.image,
+          price_per_day: bike.pricePerDay,
+          total_ratings: bike.reviews,
+          status: bike.available ? 'available' : 'unavailable',
+          license_required: true,
+          features: bike.features || []
+        })) as Bike[];
       }
 
-      return data as Bike[];
+      // If no data from database, use static data
+      if (!data || data.length === 0) {
+        return bikesData.map(bike => ({
+          ...bike,
+          brand: 'Yamaha',
+          image_url: bike.image,
+          price_per_day: bike.pricePerDay,
+          total_ratings: bike.reviews,
+          status: bike.available ? 'available' : 'unavailable',
+          license_required: true,
+          features: bike.features || []
+        })) as Bike[];
+      }
+
+      // Ensure features is always an array
+      return data.map(bike => ({
+        ...bike,
+        features: bike.features || []
+      })) as Bike[];
     },
   });
 };
@@ -78,10 +108,29 @@ export const useBike = (id: string) => {
         .single();
 
       if (error) {
-        throw new Error(error.message);
+        console.warn('Database error, falling back to static data:', error.message);
+        // Fallback to static data if database fails
+        const staticBike = bikesData.find(bike => bike.id === id);
+        if (staticBike) {
+          return {
+            ...staticBike,
+            brand: 'Yamaha',
+            image_url: staticBike.image,
+            price_per_day: staticBike.pricePerDay,
+            total_ratings: staticBike.reviews,
+            status: staticBike.available ? 'available' : 'unavailable',
+            license_required: true,
+            features: staticBike.features || []
+          } as Bike;
+        }
+        throw new Error('Bike not found');
       }
 
-      return data as Bike;
+      // Ensure features is always an array
+      return {
+        ...data,
+        features: data.features || []
+      } as Bike;
     },
     enabled: !!id,
   });

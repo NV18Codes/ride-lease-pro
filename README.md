@@ -227,7 +227,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Documentation**: [Project Wiki](https://github.com/yourusername/ride-lease-pro/wiki)
 - **Issues**: [GitHub Issues](https://github.com/yourusername/ride-lease-pro/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/yourusername/ride-lease-pro/discussions)
-- **Email**: support@amiliesbikerental.com
+- **Email**: amilebikerental@gmail.com
 
 ## 🔮 Roadmap
 

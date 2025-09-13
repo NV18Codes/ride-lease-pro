@@ -124,7 +124,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 {adminUser?.name || 'Admin User'}
               </p>
               <p className="text-xs text-bike-gray truncate">
-                {adminUser?.email || 'admin@ridelease.com'}
+                {adminUser?.email || 'amilebikerental@gmail.com'}
               </p>
             </div>
             <Button

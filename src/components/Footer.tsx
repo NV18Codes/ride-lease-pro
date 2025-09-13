@@ -19,14 +19,22 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6">
-            <div className="flex items-center space-x-2">
-              <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-bike-primary" />
-              <span className="text-bike-gray text-xs sm:text-sm">+91 77600 90695</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Mail className="h-3 w-3 sm:h-4 sm:w-4 text-bike-primary" />
-              <span className="text-bike-gray text-xs sm:text-sm break-all sm:break-normal">info@amiliesbikerental.com</span>
-            </div>
+            <a 
+              href="tel:+917892227029" 
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200 group"
+              aria-label="Call us at +91 78922 27029"
+            >
+              <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-bike-primary group-hover:text-bike-secondary transition-colors duration-200" />
+              <span className="text-bike-gray text-xs sm:text-sm group-hover:text-bike-secondary transition-colors duration-200">+91 78922 27029</span>
+            </a>
+            <a 
+              href="mailto:amilebikerental@gmail.com" 
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200 group"
+              aria-label="Email us at amilebikerental@gmail.com"
+            >
+              <Mail className="h-3 w-3 sm:h-4 sm:w-4 text-bike-primary group-hover:text-bike-secondary transition-colors duration-200" />
+              <span className="text-bike-gray text-xs sm:text-sm break-all sm:break-normal group-hover:text-bike-secondary transition-colors duration-200">amilebikerental@gmail.com</span>
+            </a>
           </div>
         </div>
 

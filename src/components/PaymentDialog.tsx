@@ -83,8 +83,8 @@ export default function PaymentDialog({
         image: '/logo.png',
         prefill: {
           name: 'Test User',
-          email: 'test@example.com',
-          contact: '7760090695'
+          email: 'amilebikerental@gmail.com',
+          contact: '7892227029'
         },
         notes: {
           booking_id: booking.id
@@ -112,8 +112,8 @@ export default function PaymentDialog({
         image: '/logo.png',
         prefill: {
           name: 'Test User',
-          email: 'test@example.com',
-          contact: '7760090695'
+          email: 'amilebikerental@gmail.com',
+          contact: '7892227029'
         },
         notes: {
           booking_id: booking.id

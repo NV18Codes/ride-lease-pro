@@ -182,7 +182,7 @@ const BikeCard = ({ bike }: BikeCardProps) => {
         {/* Enhanced Features */}
         <div className="mb-5">
           <div className="flex flex-wrap gap-2">
-            {bike.features.slice(0, 3).map((feature, index) => (
+            {(bike.features || []).slice(0, 3).map((feature, index) => (
               <Badge 
                 key={index} 
                 variant="secondary" 
@@ -191,9 +191,9 @@ const BikeCard = ({ bike }: BikeCardProps) => {
                 {feature}
               </Badge>
             ))}
-            {bike.features.length > 3 && (
+            {(bike.features || []).length > 3 && (
               <Badge variant="secondary" className="text-xs bg-gradient-to-r from-bike-sand/10 to-bike-cream/10 text-bike-sand border border-bike-sand/20 font-medium px-3 py-1">
-                +{bike.features.length - 3} more
+                +{(bike.features || []).length - 3} more
               </Badge>
             )}
           </div>
