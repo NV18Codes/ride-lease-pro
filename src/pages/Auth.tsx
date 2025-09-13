@@ -77,16 +77,22 @@ const Auth = () => {
       return;
     }
     
-    const { error } = await signUp(email, password, fullName);
+    const { error, data } = await signUp(email, password, fullName);
+    
+    console.log('🔍 FULL SIGNUP RESPONSE:', { error, data });
+    
     if (error) {
       console.log('Signup error details:', {
         message: error.message,
         status: error.status,
-        name: error.name
+        name: error.name,
+        code: error.code
       });
       
       // Check for various ways Supabase might indicate existing user
       const errorMessage = error.message.toLowerCase();
+      console.log('Error message to check:', errorMessage);
+      
       if (errorMessage.includes('already registered') || 
           errorMessage.includes('user already registered') ||
           errorMessage.includes('email already registered') ||
@@ -95,15 +101,43 @@ const Auth = () => {
           errorMessage.includes('already exists') ||
           errorMessage.includes('user already exists') ||
           errorMessage.includes('email already in use') ||
-          errorMessage.includes('email is already registered')) {
+          errorMessage.includes('email is already registered') ||
+          errorMessage.includes('user already exists') ||
+          errorMessage.includes('email address is already in use') ||
+          errorMessage.includes('duplicate') ||
+          errorMessage.includes('conflict')) {
+        console.log('✅ Detected existing user error');
         setError('An account with this email already exists. Please sign in instead or use "Forgot Password" to reset your password.');
         // Don't send verification email for existing users
         return;
       } else {
+        console.log('❌ Unknown error type:', errorMessage);
         setError(error.message);
       }
     } else {
-      setSuccess('Account created successfully! Please check your email to verify your account.');
+      console.log('✅ Signup successful, no error');
+      
+      // Check if user was actually created or if it's an existing user
+      if (data?.user && !data.user.email_confirmed_at) {
+        // New user created but needs email confirmation
+        setSuccess('Account created successfully! Please check your email to verify your account.');
+      } else if (data?.user && data.user.email_confirmed_at) {
+        // User already exists and is confirmed
+        setError('An account with this email already exists. Please sign in instead or use "Forgot Password" to reset your password.');
+      } else {
+        // Fallback - check if we can determine if user exists
+        console.log('🔍 Checking if user already exists...');
+        try {
+          const { data: existingUser } = await supabase.auth.getUser();
+          if (existingUser?.user) {
+            setError('An account with this email already exists. Please sign in instead or use "Forgot Password" to reset your password.');
+          } else {
+            setSuccess('Account created successfully! Please check your email to verify your account.');
+          }
+        } catch (err) {
+          setSuccess('Account created successfully! Please check your email to verify your account.');
+        }
+      }
     }
     setIsLoading(false);
   };

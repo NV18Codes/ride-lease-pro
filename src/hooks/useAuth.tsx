@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -62,6 +62,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       }
     });
+
+    console.log('🔍 Supabase signup response:', { data, error });
 
     if (error) {
       // Don't show toast here - let the component handle it
@@ -73,7 +75,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
     }
 
-    return { error };
+    return { data, error };
   };
 
   const signIn = async (email: string, password: string) => {
