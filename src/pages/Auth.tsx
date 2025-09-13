@@ -114,11 +114,7 @@ const Auth = () => {
       console.log('Using redirect URL:', redirectUrl);
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectUrl,
-        // Add additional options to ensure the link works properly
-        options: {
-          emailRedirectTo: redirectUrl
-        }
+        redirectTo: redirectUrl
       });
       
       console.log('Password reset response:', { error });
