@@ -53,56 +53,21 @@ export const useBikeAvailability = (bikeId: string) => {
         }
       };
     },
-    refetchInterval: 30000, // Refetch every 30 seconds to keep availability current
-    staleTime: 10000, // Consider data stale after 10 seconds
+    refetchInterval: 60000, // Refetch every 60 seconds to keep availability current
+    staleTime: 30000, // Consider data stale after 30 seconds
     refetchOnWindowFocus: true, // Refetch when user focuses the window
     refetchOnMount: true, // Always refetch when component mounts
   });
 
-  // Set up real-time subscription for bike availability
+  // Note: Individual bike subscriptions are disabled to prevent channel conflicts
+  // The global subscription in useGlobalBikeAvailability handles all bike updates
   useEffect(() => {
     if (!bikeId) return;
 
-    console.log('Setting up real-time subscription for bike availability:', bikeId);
-
-    const channel = (supabase as any)
-      .channel(`bike-availability-${bikeId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'bookings',
-          filter: `bike_id=eq.${bikeId}`,
-        },
-        (payload: any) => {
-          console.log('Real-time bike availability change detected:', payload);
-          
-          // Force immediate refetch of bike availability
-          queryClient.invalidateQueries({ queryKey: ['bike-availability', bikeId] });
-          queryClient.invalidateQueries({ queryKey: ['all-bikes-availability'] });
-          
-          // Also invalidate bikes list to update availability status
-          queryClient.invalidateQueries({ queryKey: ['bikes'] });
-          
-          // Force refetch with no stale time
-          queryClient.refetchQueries({ queryKey: ['bike-availability', bikeId] });
-        }
-      )
-      .subscribe((status: string) => {
-        console.log('Bike availability subscription status:', status);
-        if (status === 'SUBSCRIBED') {
-          console.log('Successfully subscribed to bike availability updates');
-        } else if (status === 'CHANNEL_ERROR') {
-          console.error('Bike availability subscription error');
-        }
-      });
-
-    return () => {
-      console.log('Cleaning up bike availability subscription');
-      (supabase as any).removeChannel(channel);
-    };
-  }, [bikeId, queryClient]);
+    console.log('Bike availability hook initialized for bike:', bikeId);
+    // Individual subscriptions are handled by the global subscription
+    // This prevents channel conflicts and improves performance
+  }, [bikeId]);
 
   return query;
 };
@@ -152,8 +117,8 @@ export const useAllBikesAvailability = () => {
 
       return availabilityMap;
     },
-    refetchInterval: 30000, // Refetch every 30 seconds
-    staleTime: 10000, // Consider data stale after 10 seconds
+    refetchInterval: 60000, // Refetch every 60 seconds
+    staleTime: 30000, // Consider data stale after 30 seconds
     refetchOnWindowFocus: true, // Refetch when user focuses the window
     refetchOnMount: true, // Always refetch when component mounts
   });

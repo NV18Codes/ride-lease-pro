@@ -24,10 +24,6 @@ export const useGlobalBikeAvailability = () => {
           queryClient.invalidateQueries({ queryKey: ['bike-availability'] });
           queryClient.invalidateQueries({ queryKey: ['all-bikes-availability'] });
           queryClient.invalidateQueries({ queryKey: ['bikes'] });
-          
-          // Force refetch of all bike availability queries
-          queryClient.refetchQueries({ queryKey: ['bike-availability'] });
-          queryClient.refetchQueries({ queryKey: ['all-bikes-availability'] });
         }
       )
       .subscribe((status: string) => {
@@ -36,6 +32,14 @@ export const useGlobalBikeAvailability = () => {
           console.log('Successfully subscribed to global bike availability updates');
         } else if (status === 'CHANNEL_ERROR') {
           console.error('Global bike availability subscription error');
+          // Retry subscription after a delay
+          setTimeout(() => {
+            console.log('Retrying global bike availability subscription...');
+            (supabase as any).removeChannel(channel);
+            // The useEffect will re-run and create a new subscription
+          }, 5000);
+        } else if (status === 'CLOSED') {
+          console.log('Global bike availability subscription closed');
         }
       });
 
