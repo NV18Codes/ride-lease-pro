@@ -54,6 +54,15 @@ export const useBookings = () => {
 
       console.log('Fetching bookings for user:', user.id, user.email);
 
+      // First, let's test if the database query is working correctly
+      const { data: allBookings } = await (supabase as any)
+        .from('bookings')
+        .select('id, user_id')
+        .limit(10);
+      
+      console.log('🔍 DEBUG: All bookings in database (first 10):', allBookings);
+      console.log('🔍 DEBUG: Looking for user_id:', user.id);
+
       const { data, error } = await (supabase as any)
         .from('bookings')
         .select(`
@@ -68,12 +77,26 @@ export const useBookings = () => {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
+      console.log('Raw database response:', { data, error });
+      console.log('Number of bookings found:', data?.length || 0);
+      
+      if (data && data.length > 0) {
+        console.log('First booking user_id:', data[0].user_id);
+        console.log('Current user_id:', user.id);
+        console.log('User IDs match:', data[0].user_id === user.id);
+      }
+
       // Additional security check - ensure all returned bookings belong to the user
       if (data && data.length > 0) {
         const invalidBookings = data.filter(booking => booking.user_id !== user.id);
         if (invalidBookings.length > 0) {
-          console.error('Security violation: Found bookings not belonging to user:', invalidBookings);
+          console.error('🚨 SECURITY VIOLATION: Found bookings not belonging to user!');
+          console.error('Current user ID:', user.id);
+          console.error('Invalid bookings:', invalidBookings.map(b => ({ id: b.id, user_id: b.user_id })));
+          console.error('This should NEVER happen - there is a serious security issue!');
           throw new Error('Security violation: Unauthorized access to bookings');
+        } else {
+          console.log('✅ Security check passed: All bookings belong to current user');
         }
       }
 
