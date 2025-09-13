@@ -14,7 +14,7 @@ import PaymentDialog from '@/components/PaymentDialog';
 import { Booking } from '@/hooks/useBookings';
 
 const BookingsPage = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { data: bookings = [], isLoading, error, refetch } = useBookings();
@@ -22,6 +22,7 @@ const BookingsPage = () => {
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [showModifyDialog, setShowModifyDialog] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [localBookings, setLocalBookings] = useState<any[]>([]);
 
   const updateBookingMutation = useUpdateBooking();
   const cancelBooking = useCancelBooking();
@@ -29,10 +30,27 @@ const BookingsPage = () => {
 
   // Move navigation logic to useEffect
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user) {
       navigate('/auth');
     }
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
+
+  // Sync local bookings with fetched bookings
+  useEffect(() => {
+    setLocalBookings(bookings);
+  }, [bookings]);
+
+  // Show loading while auth is being checked
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-6"></div>
+          <p className="text-xl text-muted-foreground font-medium">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Don't render anything if user is not authenticated
   if (!user) {
@@ -75,6 +93,16 @@ const BookingsPage = () => {
   };
 
   const handleCancelBooking = (booking: any) => {
+    // Check if booking is already paid
+    if ((booking.payment_status || 'pending') === 'completed') {
+      toast({
+        title: 'Cannot Delete Paid Booking',
+        description: 'This booking has been paid and cannot be deleted. Please contact support if you need assistance.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
     setSelectedBooking(booking);
     setShowCancelDialog(true);
   };
@@ -96,14 +124,14 @@ const BookingsPage = () => {
     try {
       console.log('Payment success, updating booking:', updatedBooking);
       
-      // Update the booking in the database
+      // Update the booking in the database with confirmed status
       await updateBookingMutation.mutateAsync({
         id: updatedBooking.id,
         payment_status: 'completed',
         payment_id: updatedBooking.payment_id,
         payment_method: updatedBooking.payment_method || 'razorpay',
         paid_at: updatedBooking.paid_at,
-        status: 'confirmed'
+        status: 'confirmed' // Always set to confirmed after payment
       } as any);
 
       // Show success toast
@@ -176,7 +204,7 @@ const BookingsPage = () => {
           </Button>
         </div>
 
-        {bookings.length === 0 ? (
+        {localBookings.length === 0 ? (
           <Card className="text-center py-16 border-0 shadow-soft">
             <CardContent>
               <div className="text-8xl mb-6">🏍️</div>
@@ -190,7 +218,7 @@ const BookingsPage = () => {
           </Card>
         ) : (
           <div className="grid gap-8">
-            {bookings.map((booking) => (
+            {localBookings.map((booking) => (
               <Card key={booking.id} className="hover:shadow-soft transition-all duration-300">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
@@ -333,6 +361,9 @@ const BookingsPage = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleCancelBooking(booking)}
+                      disabled={(booking.payment_status || 'pending') === 'completed'}
+                      title={(booking.payment_status || 'pending') === 'completed' ? 'Cannot delete paid bookings' : 'Delete booking'}
+                      className={(booking.payment_status || 'pending') === 'completed' ? 'opacity-50 cursor-not-allowed' : ''}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -373,11 +404,28 @@ const BookingsPage = () => {
           open={showCancelDialog}
           onOpenChange={setShowCancelDialog}
           booking={selectedBooking}
-          onConfirm={() => {
+          onConfirm={async () => {
             if (selectedBooking) {
-              cancelBooking.mutate(selectedBooking.id);
+              try {
+                console.log('Deleting booking:', selectedBooking.id);
+                
+                // Immediately remove from local state for instant UI update
+                setLocalBookings(prev => prev.filter(booking => booking.id !== selectedBooking.id));
+                
+                await cancelBooking.mutateAsync(selectedBooking.id);
+                console.log('Booking deletion completed');
+                
+                // Force refetch after successful deletion
+                await refetch();
+                console.log('Bookings refetched');
+              } catch (error) {
+                console.error('Error deleting booking:', error);
+                // Revert local state if deletion failed
+                setLocalBookings(bookings);
+              }
             }
             setShowCancelDialog(false);
+            setSelectedBooking(null);
           }}
         />
       </div>

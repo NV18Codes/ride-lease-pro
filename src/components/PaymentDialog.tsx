@@ -7,10 +7,20 @@ import { Calendar, MapPin, Clock, IndianRupee, CreditCard, CheckCircle, Shield }
 import { Booking } from '@/hooks/useBookings';
 
 interface PaymentDialogProps {
-  booking: Booking | null;
+  booking?: Booking | null;
+  bike?: any;
+  bookingData?: {
+    start_date: string;
+    end_date: string;
+    pickup_location: string;
+    drop_location: string;
+    special_instructions: string;
+    extra_helmet?: boolean;
+    total: number;
+  };
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onPaymentSuccess: (updatedBooking: Booking) => void;
+  onPaymentSuccess?: (updatedBooking: Booking) => void;
 }
 
 declare global {
@@ -21,6 +31,8 @@ declare global {
 
 export default function PaymentDialog({ 
   booking, 
+  bike,
+  bookingData,
   open, 
   onOpenChange, 
   onPaymentSuccess 
@@ -28,6 +40,40 @@ export default function PaymentDialog({
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+
+  // Helper function to get data from either booking or bookingData
+  const getBookingInfo = () => {
+    if (booking) {
+      return {
+        id: booking.id,
+        total_amount: booking.total_amount,
+        bikes: booking.bikes,
+        status: booking.status,
+        total_hours: booking.total_hours,
+        pickup_location: booking.pickup_location,
+        start_date: booking.start_date,
+        end_date: booking.end_date
+      };
+    } else if (bookingData && bike) {
+      const startDate = new Date(bookingData.start_date);
+      const endDate = new Date(bookingData.end_date);
+      const hours = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60));
+      
+      return {
+        id: 'temp',
+        total_amount: bookingData.total,
+        bikes: bike,
+        status: 'pending',
+        total_hours: hours,
+        pickup_location: bookingData.pickup_location,
+        start_date: bookingData.start_date,
+        end_date: bookingData.end_date
+      };
+    }
+    return null;
+  };
+
+  const bookingInfo = getBookingInfo();
 
   useEffect(() => {
     // Load Razorpay script with better error handling
@@ -68,10 +114,10 @@ export default function PaymentDialog({
   }, []);
 
   const handleRazorpayPayment = async () => {
-    if (!razorpayLoaded || !booking) return;
-
+    if (!razorpayLoaded || !bookingInfo) return;
+    
     setIsProcessing(true);
-    const amountInPaise = Math.round(booking.total_amount * 100);
+    const amountInPaise = Math.round(bookingInfo.total_amount * 100);
 
     try {
       console.log('Trying minimal Razorpay options:', {
@@ -87,7 +133,7 @@ export default function PaymentDialog({
           contact: '7892227029'
         },
         notes: {
-          booking_id: booking.id
+          booking_id: bookingInfo.id
         },
         theme: {
           color: '#3B82F6'
@@ -116,7 +162,7 @@ export default function PaymentDialog({
           contact: '7892227029'
         },
         notes: {
-          booking_id: booking.id
+          booking_id: bookingInfo.id
         },
         theme: {
           color: '#3B82F6'
@@ -217,7 +263,7 @@ export default function PaymentDialog({
   };
 
   // Don't render if no booking is selected
-  if (!booking) {
+  if (!bookingInfo) {
     return null;
   }
 
@@ -248,20 +294,20 @@ export default function PaymentDialog({
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4 p-4 bg-gradient-card rounded-xl">
                 <img
-                  src={booking.bikes?.image_url || '/placeholder.svg'}
-                  alt={booking.bikes?.name || 'Bike'}
+                  src={bookingInfo.bikes?.image_url || '/placeholder.svg'}
+                  alt={bookingInfo.bikes?.name || 'Bike'}
                   className="w-20 h-20 object-cover rounded-xl shadow-lg"
                 />
                 <div className="flex-1">
                   <h4 className="font-display font-bold text-xl text-foreground mb-2">
-                    {booking.bikes?.name || 'Bike'}
+                    {bookingInfo.bikes?.name || 'Bike'}
                   </h4>
                   <p className="text-muted-foreground text-base mb-3">
-                    {booking.bikes?.brand || 'Brand'} {booking.bikes?.model || 'Model'}
+                    {bookingInfo.bikes?.brand || 'Brand'} {bookingInfo.bikes?.model || 'Model'}
                   </p>
                   <div className="flex items-center gap-4">
                     <Badge className="bg-gradient-to-r from-bike-seafoam to-bike-sand text-white px-3 py-1 font-semibold">
-                      {booking.status}
+                      {bookingInfo.status}
                     </Badge>
                     <div className="flex items-center gap-1 text-primary">
 
@@ -276,14 +322,14 @@ export default function PaymentDialog({
                   <Calendar className="h-4 w-4 text-primary" />
                   <div>
                     <p className="text-muted-foreground">Duration</p>
-                    <p className="font-semibold">{booking.total_hours} hours</p>
+                    <p className="font-semibold">{bookingInfo.total_hours} hours</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-primary" />
                   <div>
                     <p className="text-muted-foreground">Pickup Location</p>
-                    <p className="font-semibold">{booking.pickup_location}</p>
+                    <p className="font-semibold">{bookingInfo.pickup_location}</p>
                   </div>
                 </div>
               </div>
@@ -379,7 +425,7 @@ export default function PaymentDialog({
               </div>
               <div className="text-right">
                 <span className="text-3xl font-display font-black bg-gradient-primary bg-clip-text text-transparent">
-                  ₹{booking.total_amount}
+                  ₹{bookingInfo.total_amount}
                 </span>
                 <p className="text-sm text-muted-foreground">Secure payment processing</p>
               </div>
@@ -413,7 +459,7 @@ export default function PaymentDialog({
               ) : (
                 <>
                   <CreditCard className="h-5 w-5 mr-2" />
-                  Pay ₹{booking.total_amount}
+                  Pay ₹{bookingInfo.total_amount}
                 </>
               )}
             </Button>

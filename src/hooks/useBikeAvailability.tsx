@@ -28,6 +28,7 @@ export const useBikeAvailability = (bikeId: string) => {
 
       if (error) {
         console.error('Error fetching bike availability:', error);
+        // If database error, assume bike is available but log the error
         return { isAvailable: true };
       }
 

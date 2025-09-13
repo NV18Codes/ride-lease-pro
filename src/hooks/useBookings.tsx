@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
+import { useEffect } from 'react';
 
 export interface Booking {
   id: string;
@@ -36,12 +37,14 @@ export interface CreateBookingData {
   pickup_location: string;
   drop_location?: string;
   special_instructions?: string;
+  extra_helmet?: boolean;
 }
 
 export const useBookings = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  return useQuery({
+  const query = useQuery({
     queryKey: ['bookings', user?.id],
     queryFn: async () => {
       if (!user) return [];
@@ -68,6 +71,46 @@ export const useBookings = () => {
     },
     enabled: !!user,
   });
+
+  // Set up real-time subscription
+  useEffect(() => {
+    if (!user) return;
+
+    console.log('Setting up real-time subscription for user:', user.id);
+
+    const channel = (supabase as any)
+      .channel('bookings-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'bookings',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload: any) => {
+          console.log('Real-time booking change detected:', payload);
+          
+          // Invalidate and refetch bookings when any change occurs
+          queryClient.invalidateQueries({ queryKey: ['bookings', user.id] });
+        }
+      )
+      .subscribe((status: string) => {
+        console.log('Real-time subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('Successfully subscribed to real-time updates');
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error('Real-time subscription error');
+        }
+      });
+
+    return () => {
+      console.log('Cleaning up real-time subscription');
+      (supabase as any).removeChannel(channel);
+    };
+  }, [user, queryClient]);
+
+  return query;
 };
 
 export const useCreateBooking = () => {
@@ -80,15 +123,30 @@ export const useCreateBooking = () => {
         throw new Error('You must be logged in to make a booking');
       }
 
+      // Validate booking data
+      if (!bookingData.bike_id || !bookingData.start_date || !bookingData.end_date) {
+        throw new Error('Missing required booking information');
+      }
+
       // Calculate total hours and amount
       const startDate = new Date(bookingData.start_date);
       const endDate = new Date(bookingData.end_date);
+      
+      // Validate dates
+      if (startDate >= endDate) {
+        throw new Error('End date must be after start date');
+      }
+      
+      if (startDate < new Date()) {
+        throw new Error('Start date cannot be in the past');
+      }
+      
       const totalHours = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60));
 
       // Get bike price
       const { data: bike, error: bikeError } = await (supabase as any)
         .from('bikes')
-        .select('price_per_day')
+        .select('price_per_day, price_per_hour')
         .eq('id', bookingData.bike_id)
         .single();
 
@@ -96,7 +154,19 @@ export const useCreateBooking = () => {
         throw new Error('Failed to get bike pricing');
       }
 
-      const totalAmount = Math.ceil(totalHours / 24) * bike!.price_per_day;
+      // Calculate pricing: 24hrs = ₹500, 24+ hrs = ₹500 + (additional hours × ₹22)
+      let totalAmount = 0;
+      if (totalHours <= 24) {
+        totalAmount = 500; // Flat rate for 24 hours or less
+      } else {
+        const additionalHours = totalHours - 24;
+        totalAmount = 500 + (additionalHours * 22); // ₹500 + additional hours × ₹22
+      }
+
+      // Add extra helmet cost if selected
+      if (bookingData.extra_helmet) {
+        totalAmount += 50;
+      }
 
       const { data, error } = await (supabase as any)
         .from('bookings')
@@ -110,8 +180,8 @@ export const useCreateBooking = () => {
           pickup_location: bookingData.pickup_location,
           drop_location: bookingData.drop_location,
           special_instructions: bookingData.special_instructions,
-          status: 'pending',
-          payment_status: 'pending',
+          status: 'pending', // Always start as pending
+          payment_status: 'pending', // Always start as pending
         })
         .select()
         .single();
@@ -201,21 +271,40 @@ export const useCancelBooking = () => {
   return useMutation({
     mutationFn: async (bookingId: string) => {
       if (!user) throw new Error('You must be logged in to cancel a booking');
-      const { data, error } = await (supabase as any)
+      
+      // Actually delete the booking from the database
+      const { error } = await (supabase as any)
         .from('bookings')
-        .update({ status: 'cancelled' })
+        .delete()
         .eq('id', bookingId)
-        .select()
-        .single();
+        .eq('user_id', user.id); // Ensure user can only delete their own bookings
+      
       if (error) throw new Error(error.message);
-      return data;
+      return { id: bookingId };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
-      toast({ title: 'Booking Cancelled', description: 'Your booking has been cancelled.' });
+    onSuccess: (data) => {
+      console.log('Booking deletion successful, updating UI...');
+      
+      // Force immediate UI update by removing the booking from cache
+      queryClient.setQueryData(['bookings', user?.id], (oldData: any) => {
+        if (!oldData) return [];
+        return oldData.filter((booking: any) => booking.id !== data.id);
+      });
+      
+      // Also invalidate and refetch to ensure consistency
+      queryClient.invalidateQueries({ queryKey: ['bookings', user?.id] });
+      
+      toast({ 
+        title: 'Booking Deleted', 
+        description: 'Your booking has been successfully deleted.' 
+      });
     },
     onError: (error) => {
-      toast({ title: 'Cancellation Failed', description: error.message, variant: 'destructive' });
+      toast({ 
+        title: 'Deletion Failed', 
+        description: error.message, 
+        variant: 'destructive' 
+      });
     }
   });
 };

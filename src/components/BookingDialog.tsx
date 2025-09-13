@@ -31,13 +31,13 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
   const { data: availability } = useBikeAvailability(bike.id);
   const [showVerification, setShowVerification] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
   const [formData, setFormData] = useState({
     start_date: '',
     end_date: '',
     pickup_location: 'Malpe, Udupi',
     drop_location: 'Malpe, Udupi',
     special_instructions: '',
+    extra_helmet: false,
   });
 
   const calculateTotal = () => {
@@ -46,9 +46,22 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
     const startDate = new Date(formData.start_date);
     const endDate = new Date(formData.end_date);
     const hours = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60));
-    const days = Math.ceil(hours / 24);
     
-    return days * bike.price_per_day;
+    // New pricing logic: 24hrs = ₹500, 24+ hrs = ₹500 + (additional hours × ₹22)
+    let totalAmount = 0;
+    if (hours <= 24) {
+      totalAmount = 500; // Flat rate for 24 hours or less
+    } else {
+      const additionalHours = hours - 24;
+      totalAmount = 500 + (additionalHours * 22); // ₹500 + additional hours × ₹22
+    }
+    
+    // Add extra helmet cost if selected
+    if (formData.extra_helmet) {
+      totalAmount += 50;
+    }
+    
+    return totalAmount;
   };
 
   const validateTime = (dateTimeString: string) => {
@@ -115,20 +128,9 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) {
-      onOpenChange(false);
-      return;
-    }
-
     // Check if verification is required
     if (!isVerified) {
       setShowVerification(true);
-      return;
-    }
-
-    // Check if terms are accepted
-    if (!termsAccepted) {
-      alert('Please accept the Terms and Conditions to proceed with booking.');
       return;
     }
 
@@ -149,29 +151,19 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
       return;
     }
 
-    const bookingData: CreateBookingData = {
-      bike_id: bike.id,
-      start_date: formData.start_date,
-      end_date: formData.end_date,
-      pickup_location: formData.pickup_location,
-      drop_location: formData.drop_location || undefined,
-      special_instructions: formData.special_instructions || undefined,
-    };
-
-    createBookingMutation.mutate(bookingData, {
-      onSuccess: () => {
-        onOpenChange(false);
-        setFormData({
-          start_date: '',
-          end_date: '',
-          pickup_location: 'Malpe, Udupi',
-          drop_location: 'Malpe, Udupi',
-          special_instructions: '',
-        });
-        setIsVerified(false);
-        setTermsAccepted(false);
-      },
-    });
+    // After verification, redirect to payment or auth
+    onOpenChange(false);
+    
+    // Create booking data URL parameters
+    const bookingParams = `bike_id=${bike.id}&start_date=${encodeURIComponent(formData.start_date)}&end_date=${encodeURIComponent(formData.end_date)}&pickup_location=${encodeURIComponent(formData.pickup_location)}&drop_location=${encodeURIComponent(formData.drop_location)}&special_instructions=${encodeURIComponent(formData.special_instructions)}&extra_helmet=${formData.extra_helmet}&total=${calculateTotal()}`;
+    
+    // If user is not logged in, redirect to auth with return URL
+    if (!user) {
+      window.location.href = `/auth?redirect=/payment&${bookingParams}`;
+    } else {
+      // If user is logged in, go directly to payment
+      window.location.href = `/payment?${bookingParams}`;
+    }
   };
 
   const handleVerificationComplete = (verified: boolean) => {
@@ -333,6 +325,29 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               />
             </div>
 
+            {/* Extra Helmet Option */}
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3 p-4 bg-gradient-card rounded-xl border border-border/50">
+                <Checkbox
+                  id="extra_helmet"
+                  checked={formData.extra_helmet}
+                  onCheckedChange={(checked) => setFormData({ ...formData, extra_helmet: checked as boolean })}
+                  className="h-5 w-5"
+                />
+                <div className="flex-1">
+                  <Label htmlFor="extra_helmet" className="text-base font-semibold cursor-pointer">
+                    Extra Helmet (Optional)
+                  </Label>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Add an extra helmet for ₹50
+                  </p>
+                </div>
+                <div className="text-lg font-bold text-primary">
+                  +₹50
+                </div>
+              </div>
+            </div>
+
             {/* Verification Status */}
             {isVerified && (
               <div className="bg-bike-seafoam/10 p-4 rounded-xl border border-bike-seafoam/20">
@@ -364,37 +379,6 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               </div>
             )}
 
-            {/* Terms and Conditions */}
-            {isVerified && formData.start_date && formData.end_date && (
-              <div className="bg-bike-light/50 p-4 rounded-xl border border-bike-sand/20">
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="terms"
-                    checked={termsAccepted}
-                    onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
-                    className="mt-1"
-                  />
-                  <div className="flex-1">
-                    <Label htmlFor="terms" className="text-sm font-medium text-foreground cursor-pointer">
-                      I agree to the{' '}
-                      <a
-                        href="/Amelie Bike Rental T&C.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-bike-primary hover:text-bike-primary/80 underline inline-flex items-center gap-1"
-                      >
-                        Terms and Conditions
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                      {' '}and understand the rental policies, safety requirements, and liability terms.
-                    </Label>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      By checking this box, you confirm that you have read and agree to all terms outlined in the document.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Enhanced Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
@@ -408,7 +392,7 @@ const BookingDialog = ({ bike, open, onOpenChange }: BookingDialogProps) => {
               </Button>
               <Button
                 type="submit"
-                disabled={createBookingMutation.isPending || (isVerified && !termsAccepted)}
+                disabled={createBookingMutation.isPending}
                 className="flex-1 h-11 sm:h-12 text-sm sm:text-base font-semibold bg-gradient-primary hover:shadow-glow transition-all duration-300"
               >
                 {createBookingMutation.isPending ? (

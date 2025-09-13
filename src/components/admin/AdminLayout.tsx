@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../ui/button';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   LayoutDashboard, 
   Bike, 
@@ -35,17 +36,28 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { adminUser } = useAdmin();
+  const { adminUser, adminLogout } = useAdmin();
   const { toast } = useToast();
 
-  const handleLogout = () => {
-    // In production, this would clear admin session
-    toast({
-      title: "Logged Out",
-      description: "You have been logged out of admin panel",
-      variant: "default",
-    });
-    navigate('/admin/login');
+  const handleLogout = async () => {
+    const result = await adminLogout();
+    
+    if (result.success) {
+      toast({
+        title: "Logged Out",
+        description: "You have been logged out of admin panel",
+        variant: "default",
+      });
+      
+      // Force redirect to admin login
+      window.location.href = '/admin/login';
+    } else {
+      toast({
+        title: "Error",
+        description: result.error || "An error occurred during logout. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const isActive = (href: string) => {

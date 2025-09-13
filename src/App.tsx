@@ -7,6 +7,8 @@ import { Toaster } from "@/components/ui/toaster";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Bookings from "./pages/Bookings";
+import Payment from "./pages/Payment";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import AdminLogin from './pages/AdminLogin';
@@ -14,6 +16,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import VehicleManagement from './pages/admin/VehicleManagement';
 import PaymentTracking from './pages/admin/PaymentTracking';
 import { useAdmin } from './hooks/useAdmin';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,7 @@ function AppRoutes() {
       {/* Public Routes */}
       <Route path="/" element={<Index />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       
       {/* Admin Routes */}
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -62,6 +66,9 @@ function AppRoutes() {
         element={<ProtectedRoute><Bookings /></ProtectedRoute>} 
       />
       
+      {/* Payment Route - Accessible but handles auth internally */}
+      <Route path="/payment" element={<Payment />} />
+      
       {/* Catch all route */}
       <Route path="*" element={<NotFound />} />
     </Routes>
@@ -69,17 +76,24 @@ function AppRoutes() {
 }
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <BrowserRouter>
-          <AppRoutes />
-          <WhatsAppButton phoneNumber="917892227029" message="Hi! I need help with my bike booking." />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true
+            }}
+          >
+            <AppRoutes />
+            <WhatsAppButton phoneNumber="917892227029" message="Hi! I need help with my bike booking." />
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

@@ -142,12 +142,32 @@ export const useAdmin = () => {
     return permissions[permission] === true;
   };
 
+  const adminLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Admin logout error:', error);
+        throw error;
+      }
+      
+      // Clear any local storage or session data
+      localStorage.removeItem('supabase.auth.token');
+      sessionStorage.clear();
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Admin logout error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
   return {
     isAdmin,
     isLoading,
     adminUser,
     adminRole,
     adminLogin,
+    adminLogout,
     hasPermission,
     checkAdminStatus
   };

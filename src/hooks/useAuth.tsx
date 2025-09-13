@@ -104,17 +104,34 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Logout error:', error);
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        // Clear any local storage or session data
+        localStorage.removeItem('supabase.auth.token');
+        sessionStorage.clear();
+        
+        toast({
+          title: "Success",
+          description: "Signed out successfully!",
+        });
+        
+        // Force page reload to ensure clean state
+        window.location.href = '/';
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: "An error occurred during logout. Please try again.",
         variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Success",
-        description: "Signed out successfully!",
       });
     }
   };
