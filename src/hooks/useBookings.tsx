@@ -47,7 +47,12 @@ export const useBookings = () => {
   const query = useQuery({
     queryKey: ['bookings', user?.id],
     queryFn: async () => {
-      if (!user) return [];
+      if (!user) {
+        console.log('No user found, returning empty bookings');
+        return [];
+      }
+
+      console.log('Fetching bookings for user:', user.id, user.email);
 
       const { data, error } = await (supabase as any)
         .from('bookings')
@@ -63,10 +68,21 @@ export const useBookings = () => {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
+      // Additional security check - ensure all returned bookings belong to the user
+      if (data && data.length > 0) {
+        const invalidBookings = data.filter(booking => booking.user_id !== user.id);
+        if (invalidBookings.length > 0) {
+          console.error('Security violation: Found bookings not belonging to user:', invalidBookings);
+          throw new Error('Security violation: Unauthorized access to bookings');
+        }
+      }
+
       if (error) {
+        console.error('Error fetching bookings:', error);
         throw new Error(error.message);
       }
 
+      console.log('Fetched bookings:', data?.length || 0, 'bookings for user', user.id);
       return data as Booking[];
     },
     enabled: !!user,
@@ -168,6 +184,8 @@ export const useCreateBooking = () => {
         totalAmount += 50;
       }
 
+      console.log('Creating booking for user:', user.id, user.email);
+      
       const { data, error } = await (supabase as any)
         .from('bookings')
         .insert({
@@ -185,6 +203,8 @@ export const useCreateBooking = () => {
         })
         .select()
         .single();
+
+      console.log('Booking creation result:', { data, error });
 
       if (error) {
         throw new Error(error.message);
@@ -225,15 +245,19 @@ export interface UpdateBookingData {
 
 export const useUpdateBooking = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   
   return useMutation({
     mutationFn: async (bookingData: Partial<Booking> & { id: string }) => {
       const { id, ...updateData } = bookingData;
       
+      if (!user) throw new Error('You must be logged in to update a booking');
+      
       const { data, error } = await supabase
         .from('bookings')
         .update(updateData)
         .eq('id', id)
+        .eq('user_id', user.id) // Ensure user can only update their own bookings
         .select()
         .single();
 
