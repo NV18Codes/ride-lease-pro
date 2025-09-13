@@ -79,8 +79,8 @@ const Auth = () => {
     
     const { error } = await signUp(email, password, fullName);
     if (error) {
-      if (error.message.includes('already registered')) {
-        setError('An account with this email already exists. Please sign in instead.');
+      if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+        setError('An account with this email already exists. Please sign in instead or use "Forgot Password" to reset your password.');
       } else {
         setError(error.message);
       }
@@ -107,8 +107,17 @@ const Auth = () => {
     
     try {
       console.log('Sending password reset email to:', email);
+      
+      // Get the current origin, fallback to production URL if needed
+      const currentOrigin = window.location.origin;
+      const redirectUrl = currentOrigin.includes('localhost') 
+        ? 'https://ride-lease-pro.vercel.app/reset-password'
+        : `${currentOrigin}/reset-password`;
+      
+      console.log('Using redirect URL:', redirectUrl);
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: redirectUrl,
       });
       
       console.log('Password reset response:', { error });

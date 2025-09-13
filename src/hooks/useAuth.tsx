@@ -52,7 +52,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    // Get the current origin, fallback to production URL if needed
+    const currentOrigin = window.location.origin;
+    const redirectUrl = currentOrigin.includes('localhost') 
+      ? 'https://ride-lease-pro.vercel.app/'
+      : `${currentOrigin}/`;
     
     const { error } = await supabase.auth.signUp({
       email,

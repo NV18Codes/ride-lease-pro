@@ -17,6 +17,7 @@ import VehicleManagement from './pages/admin/VehicleManagement';
 import PaymentTracking from './pages/admin/PaymentTracking';
 import { useAdmin } from './hooks/useAdmin';
 import ErrorBoundary from './components/ErrorBoundary';
+import PaymentErrorBoundary from './components/PaymentErrorBoundary';
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,9 @@ function AppRoutes() {
       <Route path="/auth" element={<Auth />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       
+      {/* Test route for debugging */}
+      <Route path="/test" element={<div className="p-8 text-center"><h1 className="text-2xl">Test Route Working!</h1></div>} />
+      
       {/* Admin Routes */}
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route 
@@ -67,7 +71,10 @@ function AppRoutes() {
       />
       
       {/* Payment Route - Accessible but handles auth internally */}
-      <Route path="/payment" element={<Payment />} />
+      <Route path="/payment" element={<PaymentErrorBoundary><Payment /></PaymentErrorBoundary>} />
+      
+      {/* Additional fallback routes for common paths */}
+      <Route path="/payment/*" element={<PaymentErrorBoundary><Payment /></PaymentErrorBoundary>} />
       
       {/* Catch all route */}
       <Route path="*" element={<NotFound />} />

@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useEffect } from 'react';
 
 export interface BikeAvailability {
   isAvailable: boolean;
@@ -11,7 +12,9 @@ export interface BikeAvailability {
 }
 
 export const useBikeAvailability = (bikeId: string) => {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
     queryKey: ['bike-availability', bikeId],
     queryFn: async (): Promise<BikeAvailability> => {
       const now = new Date().toISOString();
@@ -53,6 +56,47 @@ export const useBikeAvailability = (bikeId: string) => {
     refetchInterval: 60000, // Refetch every minute to keep availability current
     staleTime: 30000, // Consider data stale after 30 seconds
   });
+
+  // Set up real-time subscription for bike availability
+  useEffect(() => {
+    if (!bikeId) return;
+
+    console.log('Setting up real-time subscription for bike availability:', bikeId);
+
+    const channel = (supabase as any)
+      .channel(`bike-availability-${bikeId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'bookings',
+          filter: `bike_id=eq.${bikeId}`,
+        },
+        (payload: any) => {
+          console.log('Real-time bike availability change detected:', payload);
+          
+          // Invalidate and refetch bike availability when any change occurs
+          queryClient.invalidateQueries({ queryKey: ['bike-availability', bikeId] });
+          queryClient.invalidateQueries({ queryKey: ['all-bikes-availability'] });
+        }
+      )
+      .subscribe((status: string) => {
+        console.log('Bike availability subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('Successfully subscribed to bike availability updates');
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error('Bike availability subscription error');
+        }
+      });
+
+    return () => {
+      console.log('Cleaning up bike availability subscription');
+      (supabase as any).removeChannel(channel);
+    };
+  }, [bikeId, queryClient]);
+
+  return query;
 };
 
 export const useAllBikesAvailability = () => {

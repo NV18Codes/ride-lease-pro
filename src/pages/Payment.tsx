@@ -23,6 +23,12 @@ const Payment = () => {
   const [bike, setBike] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  // Debug logging for production
+  useEffect(() => {
+    console.log('Payment page loaded');
+    console.log('Search params:', Object.fromEntries(searchParams.entries()));
+  }, [searchParams]);
+
   // Get booking data from URL parameters
   const bikeId = searchParams.get('bike_id');
   const startDate = searchParams.get('start_date');
@@ -127,6 +133,7 @@ const Payment = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading payment details...</p>
+          <p className="text-xs text-muted-foreground mt-2">If this takes too long, please refresh the page</p>
         </div>
       </div>
     );
