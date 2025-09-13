@@ -83,27 +83,34 @@ function AppRoutes() {
   );
 }
 
-const App = () => {
+// Component that uses the global bike availability hook
+const AppWithProviders = () => {
   // Set up global bike availability subscription
   useGlobalBikeAvailability();
 
   return (
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <BrowserRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true
+          }}
+        >
+          <AppRoutes />
+          <WhatsAppButton phoneNumber="917892227029" message="Hi! I need help with my bike booking." />
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  );
+};
+
+const App = () => {
+  return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <BrowserRouter
-              future={{
-                v7_startTransition: true,
-                v7_relativeSplatPath: true
-              }}
-            >
-              <AppRoutes />
-              <WhatsAppButton phoneNumber="917892227029" message="Hi! I need help with my bike booking." />
-            </BrowserRouter>
-          </TooltipProvider>
-        </AuthProvider>
+        <AppWithProviders />
       </QueryClientProvider>
     </ErrorBoundary>
   );
