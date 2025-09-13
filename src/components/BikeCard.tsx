@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Star, Fuel, Users, MapPin, Clock, Calendar, AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Bike } from "@/hooks/useBikes";
@@ -18,7 +18,12 @@ const BikeCard = ({ bike }: BikeCardProps) => {
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { data: availability, isLoading: availabilityLoading } = useBikeAvailability(bike.id);
+  const { data: availability, isLoading: availabilityLoading, refetch: refetchAvailability } = useBikeAvailability(bike.id);
+
+  // Force refetch availability when component mounts to ensure fresh data
+  useEffect(() => {
+    refetchAvailability();
+  }, [refetchAvailability]);
 
   const handleBookNow = () => {
     if (!user) {

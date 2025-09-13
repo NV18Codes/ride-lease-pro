@@ -53,8 +53,10 @@ export const useBikeAvailability = (bikeId: string) => {
         }
       };
     },
-    refetchInterval: 60000, // Refetch every minute to keep availability current
-    staleTime: 30000, // Consider data stale after 30 seconds
+    refetchInterval: 30000, // Refetch every 30 seconds to keep availability current
+    staleTime: 10000, // Consider data stale after 10 seconds
+    refetchOnWindowFocus: true, // Refetch when user focuses the window
+    refetchOnMount: true, // Always refetch when component mounts
   });
 
   // Set up real-time subscription for bike availability
@@ -76,9 +78,15 @@ export const useBikeAvailability = (bikeId: string) => {
         (payload: any) => {
           console.log('Real-time bike availability change detected:', payload);
           
-          // Invalidate and refetch bike availability when any change occurs
+          // Force immediate refetch of bike availability
           queryClient.invalidateQueries({ queryKey: ['bike-availability', bikeId] });
           queryClient.invalidateQueries({ queryKey: ['all-bikes-availability'] });
+          
+          // Also invalidate bikes list to update availability status
+          queryClient.invalidateQueries({ queryKey: ['bikes'] });
+          
+          // Force refetch with no stale time
+          queryClient.refetchQueries({ queryKey: ['bike-availability', bikeId] });
         }
       )
       .subscribe((status: string) => {
@@ -144,7 +152,9 @@ export const useAllBikesAvailability = () => {
 
       return availabilityMap;
     },
-    refetchInterval: 60000, // Refetch every minute
-    staleTime: 30000, // Consider data stale after 30 seconds
+    refetchInterval: 30000, // Refetch every 30 seconds
+    staleTime: 10000, // Consider data stale after 10 seconds
+    refetchOnWindowFocus: true, // Refetch when user focuses the window
+    refetchOnMount: true, // Always refetch when component mounts
   });
 };

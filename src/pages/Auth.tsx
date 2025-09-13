@@ -108,11 +108,8 @@ const Auth = () => {
     try {
       console.log('Sending password reset email to:', email);
       
-      // Get the current origin, fallback to production URL if needed
-      const currentOrigin = window.location.origin;
-      const redirectUrl = currentOrigin.includes('localhost') 
-        ? 'https://ride-lease-pro.vercel.app/reset-password'
-        : `${currentOrigin}/reset-password`;
+      // Always use the production URL for password reset to avoid localhost issues
+      const redirectUrl = 'https://ride-lease-pro.vercel.app/reset-password';
       
       console.log('Using redirect URL:', redirectUrl);
       

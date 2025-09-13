@@ -18,6 +18,7 @@ import PaymentTracking from './pages/admin/PaymentTracking';
 import { useAdmin } from './hooks/useAdmin';
 import ErrorBoundary from './components/ErrorBoundary';
 import PaymentErrorBoundary from './components/PaymentErrorBoundary';
+import { useGlobalBikeAvailability } from './hooks/useGlobalBikeAvailability';
 
 const queryClient = new QueryClient();
 
@@ -82,25 +83,30 @@ function AppRoutes() {
   );
 }
 
-const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <BrowserRouter
-            future={{
-              v7_startTransition: true,
-              v7_relativeSplatPath: true
-            }}
-          >
-            <AppRoutes />
-            <WhatsAppButton phoneNumber="917892227029" message="Hi! I need help with my bike booking." />
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+const App = () => {
+  // Set up global bike availability subscription
+  useGlobalBikeAvailability();
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <BrowserRouter
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true
+              }}
+            >
+              <AppRoutes />
+              <WhatsAppButton phoneNumber="917892227029" message="Hi! I need help with my bike booking." />
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
