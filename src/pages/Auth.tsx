@@ -108,13 +108,17 @@ const Auth = () => {
     try {
       console.log('Sending password reset email to:', email);
       
-      // Always use the production URL for password reset to avoid localhost issues
+      // Use the production URL for password reset with proper format
       const redirectUrl = 'https://ride-lease-pro.vercel.app/reset-password';
       
       console.log('Using redirect URL:', redirectUrl);
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
+        // Add additional options to ensure the link works properly
+        options: {
+          emailRedirectTo: redirectUrl
+        }
       });
       
       console.log('Password reset response:', { error });

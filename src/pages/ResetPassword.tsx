@@ -26,34 +26,28 @@ const ResetPassword = () => {
     confirmPassword: ''
   });
 
-  // Check if we have a valid reset session
+  // Handle password reset from URL
   useEffect(() => {
-    const checkSession = async () => {
+    const handlePasswordReset = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        // Check if we have a valid session (user clicked reset link)
+        const { data: { session } } = await supabase.auth.getSession();
         
-        if (error) {
-          console.error('Session check error:', error);
-          setError('Invalid or expired reset link. Please request a new password reset.');
-          setSessionChecked(true);
-          return;
-        }
-
         if (session) {
           setIsValidSession(true);
         } else {
-          setError('Invalid or expired reset link. Please request a new password reset.');
+          setError('Please use the password reset link from your email.');
         }
         
         setSessionChecked(true);
       } catch (error) {
-        console.error('Session check exception:', error);
-        setError('An error occurred while verifying the reset link.');
+        console.error('Password reset error:', error);
+        setError('Invalid reset link. Please request a new password reset.');
         setSessionChecked(true);
       }
     };
 
-    checkSession();
+    handlePasswordReset();
   }, []);
 
   const handleInputChange = (field: string, value: string) => {
@@ -101,6 +95,7 @@ const ResetPassword = () => {
     }
 
     try {
+      // Update password using Supabase
       const { error } = await supabase.auth.updateUser({
         password: formData.password
       });
@@ -174,7 +169,7 @@ const ResetPassword = () => {
               
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground">
-                  Please request a new password reset link from the sign-in page.
+                  Please use the password reset link from your email.
                 </p>
                 <Button 
                   onClick={() => navigate('/auth')}
