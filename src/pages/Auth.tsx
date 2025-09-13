@@ -97,6 +97,8 @@ const Auth = () => {
           errorMessage.includes('email already in use') ||
           errorMessage.includes('email is already registered')) {
         setError('An account with this email already exists. Please sign in instead or use "Forgot Password" to reset your password.');
+        // Don't send verification email for existing users
+        return;
       } else {
         setError(error.message);
       }

@@ -52,14 +52,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    // Always use production URL for email verification to avoid localhost issues
-    const redirectUrl = 'https://ride-lease-pro.vercel.app/';
-    
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: redirectUrl,
+        emailRedirectTo: 'https://ride-lease-pro.vercel.app/',
         data: {
           full_name: fullName,
         }
